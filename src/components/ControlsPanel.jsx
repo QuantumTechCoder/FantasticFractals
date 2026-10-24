@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { FRACTAL_TYPES } from '../engine/fractalAlgorithms';
 import { PALETTES } from '../engine/palettes';
+import { SearchableDropdown } from './SearchableDropdown';
 
 export function ControlsPanel({
   fractalType,
@@ -69,28 +70,17 @@ export function ControlsPanel({
         {/* Panel Body (Collapsible) */}
         {!collapsed && (
           <div className="p-4 space-y-4 max-h-[calc(100vh-180px)] overflow-y-auto">
-            {/* 1. Fractal Type Selector */}
+            {/* 1. Fractal Type Selector with Type-to-Search */}
             <div className="space-y-1.5">
               <label className="text-[11px] font-semibold text-slate-300 uppercase tracking-wider flex items-center justify-between">
                 <span>Fractal Family</span>
                 <span className="text-[10px] text-indigo-300 font-mono">{activeMeta.category}</span>
               </label>
-              <div className="relative">
-                <select
-                  value={fractalType}
-                  onChange={(e) => setFractalType(e.target.value)}
-                  className="w-full bg-slate-900/90 text-slate-100 text-xs rounded-xl px-3 py-2.5 border border-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 appearance-none font-medium cursor-pointer shadow-inner"
-                >
-                  {FRACTAL_TYPES.map((f) => (
-                    <option key={f.id} value={f.id} className="bg-slate-900 text-slate-100">
-                      {f.name}
-                    </option>
-                  ))}
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
-                  <ChevronDown className="w-3.5 h-3.5" />
-                </div>
-              </div>
+              <SearchableDropdown
+                options={FRACTAL_TYPES}
+                value={fractalType}
+                onChange={setFractalType}
+              />
               <div className="text-[10px] text-slate-400 bg-black/30 p-2 rounded-lg border border-white/5 font-mono">
                 {activeMeta.formula}
               </div>

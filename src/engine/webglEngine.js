@@ -1,6 +1,7 @@
 /**
  * FantasticFractals - Hardware-Accelerated WebGL 2.0 Fractal Engine
  * Compiles custom fragment shaders to compute millions of fractal points in parallel on the GPU in < 5ms.
+ * Supports 24 GPU-accelerated fractal equations.
  */
 
 const VERTEX_SHADER_SRC = `#version 300 es
@@ -23,7 +24,6 @@ uniform vec2 u_resolution;
 uniform vec2 u_center;
 uniform float u_zoom;
 uniform int u_maxIterations;
-// 0: mandelbrot, 1: julia, 2: burning_ship, 3: tricorn, 4: multibrot3, 5: multibrot4, 6: newton, 7: nova, 8: sierpinski
 uniform int u_fractalType;
 uniform vec2 u_juliaConst;
 uniform sampler2D u_paletteTexture;
@@ -185,6 +185,211 @@ void main() {
       }
       p = fract(p * 3.0);
     }
+  } else if (u_fractalType == 9) {
+    // 10. Sierpinski Triangle (Gasket)
+    vec2 p = vec2(abs(c.x), c.y + 0.5);
+    for (int d = 0; d < 12; d++) {
+      if (d >= u_maxIterations) break;
+      if (p.x < 0.0) p.x = -p.x;
+      float t = 0.5 * (p.x * 1.7320508 - p.y);
+      if (t > 0.0) {
+        p.x -= 1.7320508 * t;
+        p.y += t;
+      }
+      p = p * 2.0 - vec2(0.0, 1.7320508);
+      if (dot(p, p) > 4.0) {
+        iterVal = float(d + 1) * 14.0;
+        break;
+      }
+    }
+  } else if (u_fractalType == 10) {
+    // 11. Koch Snowflake
+    vec2 p = abs(c);
+    for (int d = 0; d < 8; d++) {
+      if (d >= u_maxIterations) break;
+      p = abs(p);
+      float dDot = -0.8660254 * p.x + 0.5 * p.y;
+      if (dDot > 0.0) {
+        p += 2.0 * dDot * vec2(0.8660254, -0.5);
+      }
+      p.x -= 0.5;
+      p *= 3.0;
+      p.x += 0.5;
+      if (dot(p, p) > 4.0) {
+        iterVal = float(d + 1) * 18.0;
+        break;
+      }
+    }
+  } else if (u_fractalType == 11) {
+    // 12. Vicsek Fractal (Box Cross)
+    vec2 p = abs(c);
+    for (int d = 0; d < 8; d++) {
+      if (d >= u_maxIterations) break;
+      int mx = int(floor(p.x * 3.0)) % 3;
+      int my = int(floor(p.y * 3.0)) % 3;
+      if (mx != 1 && my != 1) {
+        iterVal = float(d + 1) * 18.0;
+        break;
+      }
+      p = fract(p * 3.0);
+    }
+  } else if (u_fractalType == 12) {
+    // 13. Celtic Mandelbrot
+    vec2 z = vec2(0.0);
+    int i = 0;
+    for (; i < 2000; i++) {
+      if (i >= u_maxIterations) break;
+      if (dot(z, z) > BAILOUT_SQ) break;
+      z = vec2(abs(z.x * z.x - z.y * z.y) + c.x, 2.0 * z.x * z.y + c.y);
+    }
+    if (i < u_maxIterations) iterVal = float(i);
+  } else if (u_fractalType == 13) {
+    // 14. Buffalo Fractal
+    vec2 z = vec2(0.0);
+    int i = 0;
+    for (; i < 2000; i++) {
+      if (i >= u_maxIterations) break;
+      if (dot(z, z) > BAILOUT_SQ) break;
+      z = vec2(abs(z.x * z.x - z.y * z.y) - abs(z.x) + c.x, -abs(2.0 * z.x * z.y) + c.y);
+    }
+    if (i < u_maxIterations) iterVal = float(i);
+  } else if (u_fractalType == 14) {
+    // 15. Perpendicular Mandelbrot
+    vec2 z = vec2(0.0);
+    int i = 0;
+    for (; i < 2000; i++) {
+      if (i >= u_maxIterations) break;
+      if (dot(z, z) > BAILOUT_SQ) break;
+      z = vec2(z.x * z.x - z.y * z.y + c.x, -2.0 * abs(z.x) * z.y + c.y);
+    }
+    if (i < u_maxIterations) iterVal = float(i);
+  } else if (u_fractalType == 15) {
+    // 16. Perpendicular Burning Ship
+    vec2 z = vec2(0.0);
+    int i = 0;
+    for (; i < 2000; i++) {
+      if (i >= u_maxIterations) break;
+      if (dot(z, z) > BAILOUT_SQ) break;
+      z = vec2(z.x * z.x - z.y * z.y + c.x, -2.0 * z.x * abs(z.y) + c.y);
+    }
+    if (i < u_maxIterations) iterVal = float(i);
+  } else if (u_fractalType == 16) {
+    // 17. Multibar 3 (Cubic Conjugate Tricorn)
+    vec2 z = vec2(0.0);
+    int i = 0;
+    for (; i < 2000; i++) {
+      if (i >= u_maxIterations) break;
+      if (dot(z, z) > BAILOUT_SQ) break;
+      z = vec2(z.x * (z.x * z.x - 3.0 * z.y * z.y) + c.x, -z.y * (3.0 * z.x * z.x - z.y * z.y) + c.y);
+    }
+    if (i < u_maxIterations) iterVal = float(i);
+  } else if (u_fractalType == 17) {
+    // 18. Newton Quartic (z^4 - 1 = 0)
+    vec2 z = c;
+    int i = 0;
+    for (; i < 500; i++) {
+      if (i >= u_maxIterations) break;
+      float d2 = dot(z, z);
+      if (d2 < 1e-8) break;
+      float d6 = d2 * d2 * d2;
+      vec2 z3 = vec2(z.x * z.x * z.x - 3.0 * z.x * z.y * z.y, -3.0 * z.x * z.x * z.y + z.y * z.y * z.y) / d6;
+      vec2 nextZ = (3.0 * z + z3) * 0.25;
+      if (distance(nextZ, z) < 1e-4) {
+        float rootId = nextZ.x > 0.5 ? 1.0 : (nextZ.x < -0.5 ? 2.0 : (nextZ.y > 0.0 ? 3.0 : 4.0));
+        iterVal = float(i) + rootId * 18.0;
+        break;
+      }
+      z = nextZ;
+    }
+  } else if (u_fractalType == 18) {
+    // 19. Feather Fractal: z^3 / (1 + z^2) + c
+    vec2 z = c;
+    int i = 0;
+    for (; i < 500; i++) {
+      if (i >= u_maxIterations) break;
+      if (dot(z, z) > BAILOUT_SQ) break;
+      vec2 z2 = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y);
+      vec2 denom = vec2(1.0 + z2.x, z2.y);
+      float denD2 = dot(denom, denom);
+      if (denD2 < 1e-8) break;
+      vec2 z3 = vec2(z.x * z2.x - z.y * z2.y, z.x * z2.y + z.y * z2.x);
+      vec2 frac = vec2(z3.x * denom.x + z3.y * denom.y, z3.y * denom.x - z3.x * denom.y) / denD2;
+      z = frac + c;
+    }
+    if (i < u_maxIterations) iterVal = float(i);
+  } else if (u_fractalType == 19) {
+    // 20. Magnet Fractal Type 1
+    vec2 z = vec2(0.0);
+    int i = 0;
+    for (; i < 500; i++) {
+      if (i >= u_maxIterations) break;
+      if (dot(z, z) > 100.0) break;
+      vec2 num = vec2(z.x * z.x - z.y * z.y + c.x - 1.0, 2.0 * z.x * z.y + c.y);
+      vec2 den = vec2(2.0 * z.x + c.x - 2.0, 2.0 * z.y + c.y);
+      float denD2 = dot(den, den);
+      if (denD2 < 1e-8) break;
+      vec2 q = vec2(num.x * den.x + num.y * den.y, num.y * den.x - num.x * den.y) / denD2;
+      z = vec2(q.x * q.x - q.y * q.y, 2.0 * q.x * q.y);
+    }
+    if (i < u_maxIterations) iterVal = float(i);
+  } else if (u_fractalType == 20) {
+    // 21. Magnet Fractal Type 2
+    vec2 z = vec2(0.0);
+    int i = 0;
+    for (; i < 500; i++) {
+      if (i >= u_maxIterations) break;
+      if (dot(z, z) > 100.0) break;
+      vec2 c1 = vec2(c.x - 1.0, c.y);
+      vec2 c2 = vec2(c.x - 2.0, c.y);
+      vec2 c12 = vec2(c1.x * c2.x - c1.y * c2.y, c1.x * c2.y + c1.y * c2.x);
+      vec2 num = vec2(z.x * (z.x * z.x - 3.0 * z.y * z.y) + 3.0 * (c1.x * z.x - c1.y * z.y) + c12.x,
+                      z.y * (3.0 * z.x * z.x - z.y * z.y) + 3.0 * (c1.x * z.y + c1.y * z.x) + c12.y);
+      vec2 den = vec2(3.0 * (z.x * z.x - z.y * z.y) + 3.0 * (c2.x * z.x - c2.y * z.y) + c12.x + 1.0,
+                      6.0 * z.x * z.y + 3.0 * (c2.x * z.y + c2.y * z.x) + c12.y);
+      float denD2 = dot(den, den);
+      if (denD2 < 1e-8) break;
+      vec2 q = vec2(num.x * den.x + num.y * den.y, num.y * den.x - num.x * den.y) / denD2;
+      z = vec2(q.x * q.x - q.y * q.y, 2.0 * q.x * q.y);
+    }
+    if (i < u_maxIterations) iterVal = float(i);
+  } else if (u_fractalType == 21) {
+    // 22. Cantor Dust (2D)
+    vec2 p = abs(c);
+    for (int d = 0; d < 8; d++) {
+      if (d >= u_maxIterations) break;
+      int mx = int(floor(p.x * 3.0)) % 3;
+      int my = int(floor(p.y * 3.0)) % 3;
+      if (mx == 1 || my == 1) {
+        iterVal = float(d + 1) * 16.0;
+        break;
+      }
+      p = fract(p * 3.0);
+    }
+  } else if (u_fractalType == 22) {
+    // 23. Apollonian Gasket Inversion
+    vec2 p = c;
+    for (int d = 0; d < 24; d++) {
+      if (d >= u_maxIterations) break;
+      p = mod(p + 1.0, 2.0) - 1.0;
+      float r2 = dot(p, p);
+      if (r2 < 1.0 && r2 > 1e-4) {
+        p /= r2;
+      } else {
+        iterVal = float(d + 1) * 12.0;
+        break;
+      }
+    }
+  } else if (u_fractalType == 23) {
+    // 24. Dragon Curve Boundary
+    vec2 z = c;
+    for (int d = 0; d < 24; d++) {
+      if (d >= u_maxIterations) break;
+      z = vec2((z.x - z.y) * 0.70710678 + 0.1, (z.x + z.y) * 0.70710678 + 0.1);
+      if (dot(z, z) > 4.0) {
+        iterVal = float(d + 1) * 15.0;
+        break;
+      }
+    }
   }
 
   if (iterVal < 0.0) {
@@ -208,7 +413,7 @@ export class WebGLFractalRenderer {
     });
 
     if (!this.gl) {
-      console.warn('WebGL2 not supported, falling back to 2D worker');
+      console.warn('WebGL2 not supported, falling back to Worker');
       return;
     }
 
@@ -251,7 +456,6 @@ export class WebGLFractalRenderer {
 
     this.program = prog;
 
-    // Cache uniform locations
     this.uniforms = {
       resolution: gl.getUniformLocation(prog, 'u_resolution'),
       center: gl.getUniformLocation(prog, 'u_center'),
@@ -350,10 +554,25 @@ export class WebGLFractalRenderer {
       newton: 6,
       nova: 7,
       sierpinski_carpet: 8,
+      sierpinski_triangle: 9,
+      koch_snowflake: 10,
+      vicsek: 11,
+      celtic_mandelbrot: 12,
+      buffalo: 13,
+      perp_mandelbrot: 14,
+      perp_burning_ship: 15,
+      multibar3: 16,
+      newton_z4: 17,
+      feather: 18,
+      magnet1: 19,
+      magnet2: 20,
+      cantor_dust: 21,
+      apollonian: 22,
+      dragon_curve: 23,
     };
 
     if (!(fractalType in typeMap)) {
-      return false; // Fall back to CPU worker for unsupported shader types (e.g. Barnsley Fern)
+      return false; // Fall back to CPU for non-shader types (e.g. Barnsley Fern, Lyapunov, Collatz)
     }
 
     gl.uniform1i(this.uniforms.fractalType, typeMap[fractalType]);

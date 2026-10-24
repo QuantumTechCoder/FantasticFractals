@@ -21,18 +21,15 @@
   - **Hardware GPU Engine (WebGL 2.0)**: Parallel fragment shaders execute escape-time loops directly on the GPU in **2 to 5 milliseconds**, delivering silky-smooth **60 FPS** interactive navigation and slideshow evolution without lag.
   - **Local Multi-Threaded Engine (Web Workers)**: Dedicated browser background workers handling complex mathematical models with zero UI thread blocking.
   - **Cloudflare Pages Functions (Edge V8 API)**: Serverless edge functions under `/functions/api/` providing high-speed headless thumbnail rendering, snapshot previews, and preset landmark metadata.
-- **🌀 Complete Catalog of Famous Fractals**:
-  - **Mandelbrot Set** ($z_{n+1} = z_n^2 + c$) with period bulb early-rejection optimization.
-  - **Julia Sets** ($z_{n+1} = z_n^2 + C$) with dynamic real-time complex constant morphing (Douady Rabbit, Dendrite, San Marco, Electric Starfish).
-  - **Burning Ship** ($z_{n+1} = (|Re(z)| + i|Im(z)|)^2 + c$) with gothic masts and armadas.
-  - **Tricorn / Mandelbar** ($z_{n+1} = \bar{z}_n^2 + c$) with 3-fold conjugate symmetry.
-  - **Multibrot Sets** ($z_{n+1} = z_n^3 + c$ and $z_{n+1} = z_n^4 + c$).
-  - **Newton-Raphson Fractals** ($z^3 - 1 = 0$) with chaotic root basin boundaries.
-  - **Nova Fractal**: Newton-Mandelbrot relaxation hybrid.
-  - **Collatz Complex Fractal**: Analytic continuation of the $3n + 1$ dynamical system into $\mathbb{C}$.
-  - **Lyapunov Space**: Chaotic bifurcation stability exponent mapping ($AB$ sequence).
-  - **Sierpinski Carpet**: Self-similar recursive geometric planar matrix.
-  - **Barnsley Fern**: Affine stochastic Iterated Function System (IFS).
+- **🌀 Complete Catalog of 27 Famous Fractals (with Type-to-Search)**:
+  - **Instant Searchable Dropdown**: Open the menu and type to filter across 27 mathematical fractals by name, category, or formula with category chips and keyboard navigation.
+  - **Classical Escape-Time**: *Mandelbrot Set, Julia Sets (Interactive $C$ Constant)*.
+  - **Non-Analytic & Modular**: *Burning Ship, Celtic Mandelbrot, Buffalo Fractal, Perpendicular Mandelbrot, Perpendicular Burning Ship*.
+  - **Conjugate & Higher Polynomials**: *Tricorn (Mandelbar), Cubic Tricorn (Multibar 3), Multibrot 3 (Cubic), Multibrot 4 (Quartic)*.
+  - **Convergence & Root Basins**: *Newton-Raphson ($z^3 - 1 = 0$), Newton Quartic ($z^4 - 1 = 0$), Nova Relaxation Hybrid*.
+  - **Physics & Rational Maps**: *Magnet Fractal Type 1, Magnet Fractal Type 2 (Potts model), Feather Fractal*.
+  - **Geometric & Recursive IFS**: *Sierpinski Triangle (Gasket), Koch Snowflake Island, Vicsek Box Cross, Sierpinski Carpet, Cantor Dust 2D, Apollonian Inversion Gasket, Heighway Dragon Boundary*.
+  - **Dynamical & Analytic Systems**: *Collatz Complex Fractal, Lyapunov Space Bifurcation, Barnsley Fern IFS*.
 - **🎬 Uniform Evolution Slideshow**:
   - Watch fractals emerge from raw geometric fields as iteration limits advance uniformly step-by-step.
   - Configurable uniform speed: 5 it/s, 10 it/s, 20 it/s, 35 it/s, or 60 it/s.
