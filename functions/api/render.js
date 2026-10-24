@@ -196,11 +196,11 @@ export async function onRequest(context) {
   const startTime = Date.now();
   const url = new URL(request.url);
 
-  // Parse parameters from query or body
+  // Parse parameters from query or body (with edge compute safety limits)
   let type = url.searchParams.get('type') || 'mandelbrot';
-  let iterations = parseInt(url.searchParams.get('iterations') || '120', 10);
-  let width = Math.min(1920, Math.max(64, parseInt(url.searchParams.get('width') || '800', 10)));
-  let height = Math.min(1080, Math.max(64, parseInt(url.searchParams.get('height') || '600', 10)));
+  let iterations = parseInt(url.searchParams.get('iterations') || '100', 10);
+  let width = Math.min(640, Math.max(64, parseInt(url.searchParams.get('width') || '400', 10)));
+  let height = Math.min(480, Math.max(64, parseInt(url.searchParams.get('height') || '300', 10)));
   let centerX = parseFloat(url.searchParams.get('centerX') || '-0.7');
   let centerY = parseFloat(url.searchParams.get('centerY') || '0.0');
   let zoom = parseFloat(url.searchParams.get('zoom') || '1.0');
@@ -216,8 +216,8 @@ export async function onRequest(context) {
       const body = await request.json();
       if (body.type) type = body.type;
       if (body.iterations) iterations = parseInt(body.iterations, 10);
-      if (body.width) width = Math.min(1920, Math.max(64, parseInt(body.width, 10)));
-      if (body.height) height = Math.min(1080, Math.max(64, parseInt(body.height, 10)));
+      if (body.width) width = Math.min(640, Math.max(64, parseInt(body.width, 10)));
+      if (body.height) height = Math.min(480, Math.max(64, parseInt(body.height, 10)));
       if (body.centerX !== undefined) centerX = parseFloat(body.centerX);
       if (body.centerY !== undefined) centerY = parseFloat(body.centerY);
       if (body.zoom !== undefined) zoom = parseFloat(body.zoom);
@@ -229,8 +229,8 @@ export async function onRequest(context) {
     } catch (_) {}
   }
 
-  // Safety caps
-  iterations = Math.min(2000, Math.max(1, iterations));
+  // Edge CPU safety caps to avoid worker isolate timeouts
+  iterations = Math.min(180, Math.max(1, iterations));
   const lut = getEdgeLUT(palette, paletteShift);
   const lutEntries = lut.length / 4;
 

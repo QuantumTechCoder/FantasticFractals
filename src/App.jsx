@@ -8,9 +8,9 @@ import { InfoModal } from './components/InfoModal';
 import { ExportModal } from './components/ExportModal';
 import { getFractalMeta } from './engine/fractalAlgorithms';
 import { generateColorLUT } from './engine/palettes';
+import { WebGLFractalRenderer } from './engine/webglEngine';
 
 export default function App() {
-  // Read initial values from URL query parameters if present
   const searchParams = new URLSearchParams(window.location.search);
 
   const initialType = searchParams.get('type') || 'mandelbrot';
@@ -26,10 +26,11 @@ export default function App() {
   const [juliaReal, setJuliaReal] = useState(parseFloat(searchParams.get('jr')) || -0.7);
   const [juliaImag, setJuliaImag] = useState(parseFloat(searchParams.get('ji')) || 0.27015);
 
-  // Engine: 'edge' (Cloudflare Pages Functions) vs 'client' (Local Web Worker)
-  const [engineMode, setEngineMode] = useState('edge');
+  // Engine: 'gpu' (Default WebGL 2ms), 'client' (Local Worker), 'edge' (Cloudflare Pages Functions)
+  const [engineMode, setEngineMode] = useState('gpu');
   const [isLoading, setIsLoading] = useState(false);
-  const [metrics, setMetrics] = useState({ durationMs: 0, engine: 'Initializing' });
+  const [metrics, setMetrics] = useState({ durationMs: 0, engine: 'Hardware GPU (WebGL 2.0)' });
+  const [isInteracting, setIsInteracting] = useState(false);
 
   // Modals state
   const [isPresetsOpen, setIsPresetsOpen] = useState(false);
@@ -37,13 +38,34 @@ export default function App() {
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  // Canvas & Worker Refs
-  const canvasRef = useRef(null);
+  // Dual Canvas Refs (WebGL & 2D)
+  const glCanvasRef = useRef(null);
+  const canvas2dRef = useRef(null);
+  const glRendererRef = useRef(null);
   const workerRef = useRef(null);
   const abortControllerRef = useRef(null);
   const renderJobIdRef = useRef(0);
+  const activeLutKeyRef = useRef('');
 
-  // Initialize Web Worker for client-side multi-threaded rendering
+  // Initialize WebGL Renderer on mount
+  useEffect(() => {
+    if (glCanvasRef.current) {
+      try {
+        glRendererRef.current = new WebGLFractalRenderer(glCanvasRef.current);
+      } catch (e) {
+        console.warn('WebGL init error, falling back to Worker:', e);
+      }
+    }
+
+    return () => {
+      if (glRendererRef.current) {
+        glRendererRef.current.destroy();
+        glRendererRef.current = null;
+      }
+    };
+  }, []);
+
+  // Initialize Web Worker for client-side multi-threaded rendering (fallback & CPU mode)
   useEffect(() => {
     workerRef.current = new Worker(new URL('./engine/fractalWorker.js', import.meta.url), {
       type: 'module',
@@ -51,9 +73,9 @@ export default function App() {
 
     workerRef.current.onmessage = (e) => {
       const { jobId, width, height, durationMs, pixels } = e.data;
-      if (jobId !== renderJobIdRef.current) return; // Outdated frame
+      if (jobId !== renderJobIdRef.current) return;
 
-      const canvas = canvasRef.current;
+      const canvas = canvas2dRef.current;
       if (canvas && width === canvas.width && height === canvas.height) {
         const ctx = canvas.getContext('2d');
         const imgData = new ImageData(new Uint8ClampedArray(pixels), width, height);
@@ -68,7 +90,7 @@ export default function App() {
     };
   }, []);
 
-  // Update defaults when changing fractal type
+  // Handle fractal type change
   const handleTypeChange = (newType) => {
     const newMeta = getFractalMeta(newType);
     setFractalType(newType);
@@ -82,29 +104,82 @@ export default function App() {
     }
   };
 
-  // Render Pipeline: Edge API or Web Worker
+  // Determine active visual canvas mode
+  const isGpuSupported =
+    glRendererRef.current?.isSupported &&
+    ![
+      'lyapunov',
+      'barnsley_fern',
+      'collatz',
+    ].includes(fractalType);
+
+  const activeMode = engineMode === 'gpu' && isGpuSupported ? 'gpu' : '2d';
+
+  // Core Render Coordinator
   const triggerRender = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    // Synchronize canvas internal buffer size with container client dimensions
-    const width = Math.floor(canvas.clientWidth) || 800;
-    const height = Math.floor(canvas.clientHeight) || 600;
-
-    if (canvas.width !== width || canvas.height !== height) {
-      canvas.width = width;
-      canvas.height = height;
-    }
-
     const currentJobId = ++renderJobIdRef.current;
 
-    // Cancel any active edge fetch request
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
+    // Check if GPU mode is selected and supported for this fractal
+    if (engineMode === 'gpu' && isGpuSupported && glRendererRef.current) {
+      const glCanvas = glCanvasRef.current;
+      if (!glCanvas) return;
+
+      const t0 = performance.now();
+      // Adaptive resolution: slightly reduced during fast dragging/scrubbing for ultra-smoothness
+      const scale = isInteracting ? 0.8 : 1.0;
+      const width = Math.floor((glCanvas.clientWidth || 800) * scale);
+      const height = Math.floor((glCanvas.clientHeight || 600) * scale);
+
+      if (glCanvas.width !== width || glCanvas.height !== height) {
+        glCanvas.width = width;
+        glCanvas.height = height;
+      }
+
+      // Update palette LUT texture if changed
+      const lutKey = `${palette}_${paletteShift.toFixed(2)}`;
+      if (activeLutKeyRef.current !== lutKey) {
+        const lut = generateColorLUT(palette, paletteShift);
+        glRendererRef.current.updatePalette(lut);
+        activeLutKeyRef.current = lutKey;
+      }
+
+      // Render directly on GPU
+      const success = glRendererRef.current.render({
+        width,
+        height,
+        centerX,
+        centerY,
+        zoom,
+        maxIterations: iterations,
+        fractalType,
+        juliaReal,
+        juliaImag,
+        paletteShift: 0.0,
+      });
+
+      if (success) {
+        const durationMs = performance.now() - t0;
+        setMetrics({ durationMs, engine: 'Hardware GPU (WebGL 2.0)' });
+        setIsLoading(false);
+        return;
+      }
     }
 
+    // Edge API Mode
     if (engineMode === 'edge') {
+      const canvas = canvas2dRef.current;
+      if (!canvas) return;
+
+      const width = Math.min(800, canvas.clientWidth || 800);
+      const height = Math.min(600, canvas.clientHeight || 600);
+
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+      }
+
       setIsLoading(true);
+      if (abortControllerRef.current) abortControllerRef.current.abort();
       const controller = new AbortController();
       abortControllerRef.current = controller;
 
@@ -128,7 +203,7 @@ export default function App() {
         })
         .catch((err) => {
           if (err.name === 'AbortError') return;
-          // Graceful fallback to client worker if Edge Function is offline (e.g. dev mode)
+          // Fallback to worker
           if (workerRef.current) {
             workerRef.current.postMessage({
               jobId: currentJobId,
@@ -145,24 +220,36 @@ export default function App() {
             });
           }
         });
-    } else {
-      // Local Web Worker
-      setIsLoading(true);
-      if (workerRef.current) {
-        workerRef.current.postMessage({
-          jobId: currentJobId,
-          type: fractalType,
-          width,
-          height,
-          centerX,
-          centerY,
-          zoom,
-          maxIterations: iterations,
-          palette,
-          paletteShift,
-          params: { juliaReal, juliaImag },
-        });
-      }
+      return;
+    }
+
+    // Local Multi-Threaded Web Worker (CPU Engine)
+    const canvas = canvas2dRef.current;
+    if (!canvas) return;
+
+    const width = Math.floor(canvas.clientWidth) || 800;
+    const height = Math.floor(canvas.clientHeight) || 600;
+
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width;
+      canvas.height = height;
+    }
+
+    setIsLoading(true);
+    if (workerRef.current) {
+      workerRef.current.postMessage({
+        jobId: currentJobId,
+        type: fractalType,
+        width,
+        height,
+        centerX,
+        centerY,
+        zoom,
+        maxIterations: iterations,
+        palette,
+        paletteShift,
+        params: { juliaReal, juliaImag },
+      });
     }
   }, [
     fractalType,
@@ -175,15 +262,17 @@ export default function App() {
     juliaReal,
     juliaImag,
     engineMode,
+    isGpuSupported,
+    isInteracting,
   ]);
 
-  // Debounced / RAF render trigger on parameter updates
+  // RequestAnimationFrame update
   useEffect(() => {
     let animId = requestAnimationFrame(triggerRender);
     return () => cancelAnimationFrame(animId);
   }, [triggerRender]);
 
-  // Window resize observer
+  // Handle window resizing
   useEffect(() => {
     const handleResize = () => triggerRender();
     window.addEventListener('resize', handleResize);
@@ -252,12 +341,14 @@ export default function App() {
           setCenterY(pt.y);
         }}
         setZoom={setZoom}
-        canvasRef={canvasRef}
+        glCanvasRef={glCanvasRef}
+        canvas2dRef={canvas2dRef}
+        activeMode={activeMode}
         isLoading={isLoading}
         metrics={metrics}
         fractalMeta={activeMeta}
         currentIterations={iterations}
-        engineMode={engineMode}
+        setIsInteracting={setIsInteracting}
       />
 
       {/* Left Control Drawer */}

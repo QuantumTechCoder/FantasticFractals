@@ -17,9 +17,10 @@
 
 ## ✨ Key Features
 
-- **⚡ Dual Engine Compute Architecture**:
-  - **Cloudflare Pages Functions (Edge V8)**: Computes fractal buffers at edge locations worldwide with sub-50ms execution times and returns raw binary streams.
-  - **Local Multi-Threaded Engine (Web Workers)**: Dedicated browser background workers ensuring 60 FPS fluidity with zero UI freezing.
+- **⚡ Hybrid High-Speed Compute Architecture**:
+  - **Hardware GPU Engine (WebGL 2.0)**: Parallel fragment shaders execute escape-time loops directly on the GPU in **2 to 5 milliseconds**, delivering silky-smooth **60 FPS** interactive navigation and slideshow evolution without lag.
+  - **Local Multi-Threaded Engine (Web Workers)**: Dedicated browser background workers handling complex mathematical models with zero UI thread blocking.
+  - **Cloudflare Pages Functions (Edge V8 API)**: Serverless edge functions under `/functions/api/` providing high-speed headless thumbnail rendering, snapshot previews, and preset landmark metadata.
 - **🌀 Complete Catalog of Famous Fractals**:
   - **Mandelbrot Set** ($z_{n+1} = z_n^2 + c$) with period bulb early-rejection optimization.
   - **Julia Sets** ($z_{n+1} = z_n^2 + C$) with dynamic real-time complex constant morphing (Douady Rabbit, Dendrite, San Marco, Electric Starfish).

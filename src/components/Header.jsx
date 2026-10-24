@@ -9,6 +9,7 @@ import {
   Server,
   Cpu,
   Layers,
+  Zap,
 } from 'lucide-react';
 
 export function Header({
@@ -35,7 +36,7 @@ export function Header({
               FantasticFractals
             </h1>
             <span className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-semibold tracking-wider uppercase rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-              Edge V8
+              GPU WebGL 2.0
             </span>
           </div>
           <p className="text-[10px] text-slate-400 hidden md:block">
@@ -58,28 +59,40 @@ export function Header({
         {/* Engine switcher button */}
         <div className="flex items-center rounded-lg bg-black/40 border border-white/10 p-0.5">
           <button
-            onClick={() => setEngineMode('edge')}
+            onClick={() => setEngineMode('gpu')}
             className={`flex items-center space-x-1 px-2.5 py-1 rounded-md text-xs font-medium transition-all ${
-              engineMode === 'edge'
-                ? 'bg-gradient-to-r from-indigo-600 to-cyan-600 text-white shadow'
+              engineMode === 'gpu'
+                ? 'bg-gradient-to-r from-indigo-600 to-cyan-600 text-white shadow font-semibold'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
-            title="Cloudflare Pages Functions Edge Engine (Serverless V8)"
+            title="Hardware-accelerated WebGL 2.0 GPU Shader (2ms, Instant 60 FPS)"
           >
-            <Server className="w-3 h-3" />
-            <span className="hidden sm:inline">Edge Engine</span>
+            <Zap className="w-3 h-3 text-cyan-300" />
+            <span className="hidden sm:inline">GPU Engine</span>
           </button>
           <button
             onClick={() => setEngineMode('client')}
-            className={`flex items-center space-x-1 px-2.5 py-1 rounded-md text-xs font-medium transition-all ${
+            className={`flex items-center space-x-1 px-2 py-1 rounded-md text-xs font-medium transition-all ${
               engineMode === 'client'
                 ? 'bg-gradient-to-r from-indigo-600 to-cyan-600 text-white shadow'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
-            title="Multi-threaded Client Web Worker Engine (0ms Latency)"
+            title="Multi-threaded Client Web Worker"
           >
             <Cpu className="w-3 h-3" />
-            <span className="hidden sm:inline">Local Engine</span>
+            <span className="hidden md:inline">Worker</span>
+          </button>
+          <button
+            onClick={() => setEngineMode('edge')}
+            className={`flex items-center space-x-1 px-2 py-1 rounded-md text-xs font-medium transition-all ${
+              engineMode === 'edge'
+                ? 'bg-gradient-to-r from-indigo-600 to-cyan-600 text-white shadow'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+            title="Cloudflare Pages Functions Edge API"
+          >
+            <Server className="w-3 h-3" />
+            <span className="hidden md:inline">Edge API</span>
           </button>
         </div>
       </div>

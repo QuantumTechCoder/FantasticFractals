@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Compass, ZoomIn, Activity } from 'lucide-react';
 
 export function FractalCanvas({
@@ -7,12 +7,14 @@ export function FractalCanvas({
   zoom,
   setCenter,
   setZoom,
-  canvasRef,
+  glCanvasRef,
+  canvas2dRef,
+  activeMode = 'gpu',
   isLoading,
   metrics,
   fractalMeta,
   currentIterations,
-  engineMode,
+  setIsInteracting,
 }) {
   const containerRef = useRef(null);
   const isDraggingRef = useRef(false);
@@ -29,17 +31,18 @@ export function FractalCanvas({
   const handleMouseDown = (e) => {
     if (e.button !== 0) return; // Only left click
     isDraggingRef.current = true;
+    if (setIsInteracting) setIsInteracting(true);
     dragStartRef.current = { x: e.clientX, y: e.clientY };
     centerAtDragStartRef.current = { x: centerX, y: centerY };
   };
 
   const handleMouseMove = (e) => {
-    if (!isDraggingRef.current || !canvasRef.current) return;
+    if (!isDraggingRef.current || !containerRef.current) return;
 
     const dx = e.clientX - dragStartRef.current.x;
     const dy = e.clientY - dragStartRef.current.y;
 
-    const rect = canvasRef.current.getBoundingClientRect();
+    const rect = containerRef.current.getBoundingClientRect();
     const aspect = rect.width / rect.height;
     const spanY = 2.5 / zoom;
     const spanX = spanY * aspect;
@@ -54,15 +57,26 @@ export function FractalCanvas({
   };
 
   const handleMouseUp = () => {
-    isDraggingRef.current = false;
+    if (isDraggingRef.current) {
+      isDraggingRef.current = false;
+      if (setIsInteracting) setIsInteracting(false);
+    }
   };
 
-  // Handle Zoom via Mouse Wheel (zooming centered on cursor)
+  // Handle Zoom via Mouse Wheel
   const handleWheel = (e) => {
     e.preventDefault();
-    if (!canvasRef.current) return;
+    if (!containerRef.current) return;
 
-    const rect = canvasRef.current.getBoundingClientRect();
+    if (setIsInteracting) {
+      setIsInteracting(true);
+      clearTimeout(window._wheelTimeout);
+      window._wheelTimeout = setTimeout(() => {
+        setIsInteracting(false);
+      }, 150);
+    }
+
+    const rect = containerRef.current.getBoundingClientRect();
     const mouseX = e.clientX - rect.x;
     const mouseY = e.clientY - rect.y;
 
@@ -70,17 +84,11 @@ export function FractalCanvas({
     const spanY = 2.5 / zoom;
     const spanX = spanY * aspect;
 
-    // Convert mouse position to complex plane before zoom
     const mouseComplexX = centerX - spanX / 2.0 + (mouseX / rect.width) * spanX;
     const mouseComplexY = centerY + spanY / 2.0 - (mouseY / rect.height) * spanY;
 
-    // Zoom multiplier
     const factor = e.deltaY < 0 ? 1.25 : 0.8;
     const newZoom = Math.max(0.1, zoom * factor);
-
-    // Recompute new center so mouse point remains stationary
-    const newSpanY = 2.5 / newZoom;
-    const newSpanX = newSpanY * aspect;
 
     const newCenterX = mouseComplexX + (spanX / 2.0 - (mouseX / rect.width) * spanX) * (factor - 1) / factor;
     const newCenterY = mouseComplexY - (spanY / 2.0 - (mouseY / rect.height) * spanY) * (factor - 1) / factor;
@@ -91,8 +99,8 @@ export function FractalCanvas({
 
   // Handle Double Click to Zoom In
   const handleDoubleClick = (e) => {
-    if (!canvasRef.current) return;
-    const rect = canvasRef.current.getBoundingClientRect();
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
     const mouseX = e.clientX - rect.x;
     const mouseY = e.clientY - rect.y;
 
@@ -107,9 +115,10 @@ export function FractalCanvas({
     setZoom(zoom * 2.0);
   };
 
-  // Touch pinch-to-zoom support
+  // Touch support
   const touchDistanceRef = useRef(null);
   const handleTouchStart = (e) => {
+    if (setIsInteracting) setIsInteracting(true);
     if (e.touches.length === 2) {
       const dx = e.touches[0].clientX - e.touches[1].clientX;
       const dy = e.touches[0].clientY - e.touches[1].clientY;
@@ -122,7 +131,7 @@ export function FractalCanvas({
   };
 
   const handleTouchMove = (e) => {
-    if (e.touches.length === 2 && touchDistanceRef.current && canvasRef.current) {
+    if (e.touches.length === 2 && touchDistanceRef.current && containerRef.current) {
       const dx = e.touches[0].clientX - e.touches[1].clientX;
       const dy = e.touches[0].clientY - e.touches[1].clientY;
       const dist = Math.hypot(dx, dy);
@@ -131,10 +140,10 @@ export function FractalCanvas({
         setZoom(Math.max(0.1, zoom * ratio));
       }
       touchDistanceRef.current = dist;
-    } else if (e.touches.length === 1 && isDraggingRef.current && canvasRef.current) {
+    } else if (e.touches.length === 1 && isDraggingRef.current && containerRef.current) {
       const dx = e.touches[0].clientX - dragStartRef.current.x;
       const dy = e.touches[0].clientY - dragStartRef.current.y;
-      const rect = canvasRef.current.getBoundingClientRect();
+      const rect = containerRef.current.getBoundingClientRect();
       const aspect = rect.width / rect.height;
       const spanY = 2.5 / zoom;
       const spanX = spanY * aspect;
@@ -148,9 +157,9 @@ export function FractalCanvas({
   const handleTouchEnd = () => {
     isDraggingRef.current = false;
     touchDistanceRef.current = null;
+    if (setIsInteracting) setIsInteracting(false);
   };
 
-  // Format zoom in scientific or human-readable format
   const formatZoom = (z) => {
     if (z >= 1e6) return z.toExponential(2) + 'x';
     if (z >= 100) return Math.round(z) + 'x';
@@ -171,16 +180,27 @@ export function FractalCanvas({
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
+      {/* Hardware-Accelerated WebGL Canvas */}
       <canvas
-        ref={canvasRef}
-        className="w-full h-full block image-rendering-auto"
+        ref={glCanvasRef}
+        className={`absolute inset-0 w-full h-full block ${
+          activeMode === 'gpu' ? 'opacity-100 z-10' : 'opacity-0 pointer-events-none z-0'
+        }`}
+      />
+
+      {/* 2D Canvas (for point-based IFS / Worker fallback / Edge buffer) */}
+      <canvas
+        ref={canvas2dRef}
+        className={`absolute inset-0 w-full h-full block ${
+          activeMode !== 'gpu' ? 'opacity-100 z-10' : 'opacity-0 pointer-events-none z-0'
+        }`}
       />
 
       {/* Loading Indicator Pill */}
       {isLoading && (
         <div className="absolute top-18 left-4 z-20 flex items-center space-x-2 px-3 py-1.5 rounded-full bg-indigo-950/80 border border-indigo-500/40 text-indigo-200 text-xs shadow-xl backdrop-blur-md animate-pulse">
           <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping" />
-          <span>Computing {engineMode === 'edge' ? 'via Cloudflare Edge' : 'in Local Worker'}...</span>
+          <span>Computing...</span>
         </div>
       )}
 
@@ -217,21 +237,22 @@ export function FractalCanvas({
               </div>
             </div>
 
-            {/* Compute metrics badge */}
             {metrics && (
               <div className="pt-1.5 border-t border-white/10 flex items-center justify-between text-[10px] text-slate-400 font-mono">
                 <span className="flex items-center space-x-1">
                   <Activity className="w-3 h-3 text-emerald-400" />
-                  <span>{metrics.engine || (engineMode === 'edge' ? 'Cloudflare Edge' : 'Web Worker')}</span>
+                  <span className="truncate max-w-[130px]">{metrics.engine}</span>
                 </span>
-                <span className="text-emerald-300 font-semibold">{Math.round(metrics.calcDurationMs || metrics.durationMs || 0)}ms</span>
+                <span className="text-emerald-300 font-semibold">
+                  {Math.round(metrics.durationMs || 0)}ms
+                </span>
               </div>
             )}
           </div>
         </div>
       )}
 
-      {/* Bottom Floating Reticle / Quick Zoom Overlay */}
+      {/* Floating Zoom Controls */}
       <div className="absolute bottom-24 right-4 z-20 flex flex-col space-y-2 pointer-events-auto">
         <button
           onClick={() => setZoom(zoom * 1.5)}
