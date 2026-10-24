@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Compass, ZoomIn, Activity } from 'lucide-react';
 
 export function FractalCanvas({
@@ -18,41 +18,39 @@ export function FractalCanvas({
 }) {
   const containerRef = useRef(null);
   const isDraggingRef = useRef(false);
-  const dragStartRef = useRef({ x: 0, y: 0 });
-  const centerAtDragStartRef = useRef({ x: centerX, y: centerY });
+  const lastMousePosRef = useRef({ x: 0, y: 0 });
+  const lastTouchPosRef = useRef({ x: 0, y: 0 });
+  const touchDistanceRef = useRef(null);
   const [hudVisible, setHudVisible] = useState(true);
 
-  // Sync drag start center
-  useEffect(() => {
-    centerAtDragStartRef.current = { x: centerX, y: centerY };
-  }, [centerX, centerY]);
-
-  // Handle Pan via Mouse Drag
+  // 1. Mouse Drag to Pan (Relative Frame-by-Frame Delta — No Runaway)
   const handleMouseDown = (e) => {
-    if (e.button !== 0) return; // Only left click
+    if (e.button !== 0) return; // Only primary left-click
     isDraggingRef.current = true;
+    lastMousePosRef.current = { x: e.clientX, y: e.clientY };
     if (setIsInteracting) setIsInteracting(true);
-    dragStartRef.current = { x: e.clientX, y: e.clientY };
-    centerAtDragStartRef.current = { x: centerX, y: centerY };
   };
 
   const handleMouseMove = (e) => {
     if (!isDraggingRef.current || !containerRef.current) return;
 
-    const dx = e.clientX - dragStartRef.current.x;
-    const dy = e.clientY - dragStartRef.current.y;
+    const dx = e.clientX - lastMousePosRef.current.x;
+    const dy = e.clientY - lastMousePosRef.current.y;
+    lastMousePosRef.current = { x: e.clientX, y: e.clientY };
 
     const rect = containerRef.current.getBoundingClientRect();
     const aspect = rect.width / rect.height;
     const spanY = 2.5 / zoom;
     const spanX = spanY * aspect;
 
+    // Moving mouse to the right pulls the image right (center moves left in complex plane)
     const deltaComplexX = -(dx / rect.width) * spanX;
+    // Moving mouse down pulls the image down (center moves up in complex plane)
     const deltaComplexY = (dy / rect.height) * spanY;
 
     setCenter({
-      x: centerAtDragStartRef.current.x + deltaComplexX,
-      y: centerAtDragStartRef.current.y + deltaComplexY,
+      x: centerX + deltaComplexX,
+      y: centerY + deltaComplexY,
     });
   };
 
@@ -63,7 +61,7 @@ export function FractalCanvas({
     }
   };
 
-  // Handle Zoom via Mouse Wheel
+  // 2. Mouse Wheel to Zoom (Anchored to Cursor Position)
   const handleWheel = (e) => {
     e.preventDefault();
     if (!containerRef.current) return;
@@ -77,46 +75,57 @@ export function FractalCanvas({
     }
 
     const rect = containerRef.current.getBoundingClientRect();
-    const mouseX = e.clientX - rect.x;
-    const mouseY = e.clientY - rect.y;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
 
     const aspect = rect.width / rect.height;
     const spanY = 2.5 / zoom;
     const spanX = spanY * aspect;
 
-    const mouseComplexX = centerX - spanX / 2.0 + (mouseX / rect.width) * spanX;
-    const mouseComplexY = centerY + spanY / 2.0 - (mouseY / rect.height) * spanY;
+    const u = mouseX / rect.width;
+    const v = mouseY / rect.height;
 
+    // Complex coordinate directly beneath cursor
+    const mouseComplexX = centerX + (u - 0.5) * spanX;
+    const mouseComplexY = centerY + (0.5 - v) * spanY;
+
+    // Zoom factor: 1.25x in on wheel up, 0.8x out on wheel down
     const factor = e.deltaY < 0 ? 1.25 : 0.8;
     const newZoom = Math.max(0.1, zoom * factor);
 
-    const newCenterX = mouseComplexX + (spanX / 2.0 - (mouseX / rect.width) * spanX) * (factor - 1) / factor;
-    const newCenterY = mouseComplexY - (spanY / 2.0 - (mouseY / rect.height) * spanY) * (factor - 1) / factor;
+    const newSpanY = 2.5 / newZoom;
+    const newSpanX = newSpanY * aspect;
+
+    // Keep point under cursor invariant
+    const newCenterX = mouseComplexX - (u - 0.5) * newSpanX;
+    const newCenterY = mouseComplexY - (0.5 - v) * newSpanY;
 
     setZoom(newZoom);
     setCenter({ x: newCenterX, y: newCenterY });
   };
 
-  // Handle Double Click to Zoom In
+  // 3. Double Click to Center & Zoom 2x
   const handleDoubleClick = (e) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const mouseX = e.clientX - rect.x;
-    const mouseY = e.clientY - rect.y;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
 
     const aspect = rect.width / rect.height;
     const spanY = 2.5 / zoom;
     const spanX = spanY * aspect;
 
-    const targetX = centerX - spanX / 2.0 + (mouseX / rect.width) * spanX;
-    const targetY = centerY + spanY / 2.0 - (mouseY / rect.height) * spanY;
+    const u = mouseX / rect.width;
+    const v = mouseY / rect.height;
+
+    const targetX = centerX + (u - 0.5) * spanX;
+    const targetY = centerY + (0.5 - v) * spanY;
 
     setCenter({ x: targetX, y: targetY });
     setZoom(zoom * 2.0);
   };
 
-  // Touch support
-  const touchDistanceRef = useRef(null);
+  // 4. Touch Pan & Pinch Zoom
   const handleTouchStart = (e) => {
     if (setIsInteracting) setIsInteracting(true);
     if (e.touches.length === 2) {
@@ -125,13 +134,12 @@ export function FractalCanvas({
       touchDistanceRef.current = Math.hypot(dx, dy);
     } else if (e.touches.length === 1) {
       isDraggingRef.current = true;
-      dragStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-      centerAtDragStartRef.current = { x: centerX, y: centerY };
+      lastTouchPosRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
     }
   };
 
   const handleTouchMove = (e) => {
-    if (e.touches.length === 2 && touchDistanceRef.current && containerRef.current) {
+    if (e.touches.length === 2 && touchDistanceRef.current) {
       const dx = e.touches[0].clientX - e.touches[1].clientX;
       const dy = e.touches[0].clientY - e.touches[1].clientY;
       const dist = Math.hypot(dx, dy);
@@ -141,15 +149,18 @@ export function FractalCanvas({
       }
       touchDistanceRef.current = dist;
     } else if (e.touches.length === 1 && isDraggingRef.current && containerRef.current) {
-      const dx = e.touches[0].clientX - dragStartRef.current.x;
-      const dy = e.touches[0].clientY - dragStartRef.current.y;
+      const dx = e.touches[0].clientX - lastTouchPosRef.current.x;
+      const dy = e.touches[0].clientY - lastTouchPosRef.current.y;
+      lastTouchPosRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+
       const rect = containerRef.current.getBoundingClientRect();
       const aspect = rect.width / rect.height;
       const spanY = 2.5 / zoom;
       const spanX = spanY * aspect;
+
       setCenter({
-        x: centerAtDragStartRef.current.x - (dx / rect.width) * spanX,
-        y: centerAtDragStartRef.current.y + (dy / rect.height) * spanY,
+        x: centerX - (dx / rect.width) * spanX,
+        y: centerY + (dy / rect.height) * spanY,
       });
     }
   };
