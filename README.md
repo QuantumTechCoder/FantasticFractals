@@ -19,8 +19,8 @@ This repository is organized into dedicated branches for each component and ecos
 
 ## 🚀 Quick Navigation
 
-To explore or deploy the web application:
-- Switch to the [`website`](https://github.com/QuantumTechCoder/FantasticFractals/tree/website) branch.
+- 🌐 **Live Website**: [https://fantasticfractals.pages.dev](https://fantasticfractals.pages.dev)
+- To explore the web application code: switch to the [`website`](https://github.com/QuantumTechCoder/FantasticFractals/tree/website) branch.
 - Clone specifically:
   ```bash
   git clone -b website https://github.com/QuantumTechCoder/FantasticFractals.git
