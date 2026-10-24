@@ -2,7 +2,9 @@
 
 > High-speed interactive fractal explorer and evolution visualizer built with **React**, **Vite**, and **Cloudflare Pages & Pages Functions**.
 
-[![Cloudflare Pages](https://img.shields.io/badge/Cloudflare-Pages%20Functions-F38020?logo=cloudflare&logoColor=white)](https://pages.cloudflare.com/)
+🌐 **Live Website**: [https://fantasticfractals.pages.dev](https://fantasticfractals.pages.dev)
+
+[![Cloudflare Pages](https://img.shields.io/badge/Cloudflare-Pages%20Functions-F38020?logo=cloudflare&logoColor=white)](https://fantasticfractals.pages.dev)
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react&logoColor=black)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -112,26 +114,6 @@ To run with **Cloudflare Pages Functions locally** using Wrangler:
 ```bash
 npm run build
 npx wrangler pages dev dist
-```
-
----
-
-## ☁️ Deploying to Cloudflare Pages
-
-### Option 1: Git Integration (Recommended)
-1. Go to the [Cloudflare Dashboard](https://dash.cloudflare.com/) > **Workers & Pages** > **Create application** > **Pages** > **Connect to Git**.
-2. Select repository: `QuantumTechCoder/FantasticFractals`.
-3. Configure build settings:
-   - **Production branch**: `website`
-   - **Framework preset**: `Vite`
-   - **Build command**: `npm run build`
-   - **Build output directory**: `dist`
-4. Click **Save and Deploy**. Cloudflare Pages will automatically detect the `/functions` directory and deploy the serverless edge functions alongside the static assets!
-
-### Option 2: Wrangler CLI
-```bash
-npm run build
-npx wrangler pages deploy dist --project-name=fantastic-fractals
 ```
 
 ---
