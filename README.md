@@ -10,22 +10,21 @@ This repository is organized into dedicated branches for each component and ecos
 
 | Branch | Purpose | Description & Tech Stack |
 | :--- | :--- | :--- |
-| **main** | **Project Index & Documentation** | Central branch housing the project overview, architecture guide, and branch directory. (You are here) |
-| **website** | **Web Application & API** | Interactive React + Vite frontend with Cloudflare Pages Functions backend for accelerated fractal computation, high-resolution rendering, and real-time parameter tweaking. |
-| *python* *(Planned)* | *Python Scientific Library & CLI* | High-precision fractal computation scripts, NumPy/Numba engines, and export utilities. |
-| *
-odejs* *(Planned)* | *Node.js Package & Utilities* | Standalone Node.js / npm library and CLI for procedural fractal generation. |
+| **`main`** | **Project Index & Documentation** | Central branch housing the project overview, architecture guide, and branch directory. *(You are here)* |
+| **`website`** | **Web Application & API** | Interactive React + Vite frontend with Cloudflare Pages Functions backend for accelerated fractal computation, high-resolution rendering, and real-time parameter tweaking. |
+| *`python`* *(Planned)* | *Python Scientific Library & CLI* | High-precision fractal computation scripts, NumPy/Numba engines, and export utilities. |
+| *`nodejs`* *(Planned)* | *Node.js Package & Utilities* | Standalone Node.js / npm library and CLI for procedural fractal generation. |
 
 ---
 
 ## 🚀 Quick Navigation
 
 To explore or deploy the web application:
-- Switch to the [website](https://github.com/QuantumTechCoder/FantasticFractals/tree/website) branch.
+- Switch to the [`website`](https://github.com/QuantumTechCoder/FantasticFractals/tree/website) branch.
 - Clone specifically:
-  `ash
+  ```bash
   git clone -b website https://github.com/QuantumTechCoder/FantasticFractals.git
-  `
+  ```
 
 ---
 
