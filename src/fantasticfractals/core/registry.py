@@ -227,10 +227,10 @@ FRACTAL_REGISTRY: Dict[str, FractalMeta] = {
         category="Geometric / IFS",
         formula="p_{n+1} = 2p_n - v_i",
         description="Classic self-similar triangular fractal with Hausdorff dimension ~1.585.",
-        default_center=(0.0, 0.3),
+        default_center=(0.0, 0.25),
         default_zoom=0.85,
-        default_iterations=9,
-        max_iterations=16,
+        default_iterations=8,
+        max_iterations=14,
     ),
     "koch_snowflake": FractalMeta(
         id="koch_snowflake",

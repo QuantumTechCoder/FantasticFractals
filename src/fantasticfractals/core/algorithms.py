@@ -335,29 +335,69 @@ def compute_grid(
 
     elif fid == "sierpinski_triangle":
         iters = np.full(C.shape, -1.0, dtype=np.float64)
-        px = np.abs(X)
-        py = Y + 0.5
-        depth = min(max_iterations, 12)
-        active = np.ones(C.shape, dtype=bool)
+        v1x, v1y = 0.0, 1.0
+        v2x, v2y = -0.8660254038, -0.5
+        v3x, v3y = 0.8660254038, -0.5
+
+        px = X.copy()
+        py = Y.copy()
+
+        d1 = px * v1x + py * v1y
+        d2 = px * v2x + py * v2y
+        d3 = px * v3x + py * v3y
+        min_d = np.minimum(d1, np.minimum(d2, d3))
+
+        outside = min_d < -0.5
+        dist = -0.5 - min_d[outside]
+        iters[outside] = np.log1p(dist * 30.0) * 20.0 + 1.0
+
+        active = ~outside
+        depth = min(max_iterations, 14)
 
         for d in range(depth):
             if not np.any(active):
                 break
             px_act = px[active]
             py_act = py[active]
-            t = 0.5 * (px_act * 1.7320508 - py_act)
-            flip = t > 0
-            px_act[flip] -= 1.7320508 * t[flip]
-            py_act[flip] += t[flip]
-            px_act = px_act * 2.0
-            py_act = py_act * 2.0 - 1.7320508
+
+            ad1 = px_act * v1x + py_act * v1y
+            ad2 = px_act * v2x + py_act * v2y
+            ad3 = px_act * v3x + py_act * v3y
+
+            max_d = np.maximum(ad1, np.maximum(ad2, ad3))
+            hole = max_d < 0.25
+
+            if np.any(hole):
+                act_coords = np.where(active)[0][hole], np.where(active)[1][hole]
+                iters[act_coords] = float(d + 1) * 16.0
+                active[act_coords] = False
+
+                if not np.any(active):
+                    break
+                not_hole = ~hole
+                px_act = px_act[not_hole]
+                py_act = py_act[not_hole]
+                ad1 = ad1[not_hole]
+                ad2 = ad2[not_hole]
+                ad3 = ad3[not_hole]
+                max_d = max_d[not_hole]
+
+            vx = np.full(px_act.shape, v1x)
+            vy = np.full(py_act.shape, v1y)
+
+            m2 = ad2 == max_d
+            vx[m2] = v2x
+            vy[m2] = v2y
+
+            m3 = (ad3 == max_d) & (~m2)
+            vx[m3] = v3x
+            vy[m3] = v3y
+
+            px_act = 2.0 * px_act - vx
+            py_act = 2.0 * py_act - vy
+
             px[active] = px_act
             py[active] = py_act
-            escaped = (px_act ** 2 + py_act ** 2) > 4.0
-            if np.any(escaped):
-                act_coords = np.where(active)[0][escaped], np.where(active)[1][escaped]
-                iters[act_coords] = float(d + 1) * 14.0
-                active[act_coords] = False
 
         return iters
 
