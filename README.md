@@ -3,6 +3,7 @@
   <p><strong>Vectorized NumPy fractal rendering engine, scientific analysis suite, 4K/8K/16K image exporter & zoom dive generator.</strong></p>
   <p>
     <a href="https://github.com/QuantumTechCoder/FantasticFractals/tree/python"><img src="https://img.shields.io/badge/Python-3.9+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python 3.9+" /></a>
+    <a href="https://github.com/QuantumTechCoder/FantasticFractals/releases"><img src="https://img.shields.io/badge/Platform-Windows_AMD64-0078D6?style=flat-square&logo=windows" alt="Windows AMD64" /></a>
     <a href="https://numpy.org"><img src="https://img.shields.io/badge/NumPy-Vectorized-013243?style=flat-square&logo=numpy" alt="NumPy Vectorized" /></a>
     <a href="https://pillow.readthedocs.io"><img src="https://img.shields.io/badge/Pillow-16K_Export-11557c?style=flat-square" alt="Pillow 16K Export" /></a>
     <a href="https://docs.pytest.org"><img src="https://img.shields.io/badge/pytest-19_passed-brightgreen?style=flat-square&logo=pytest" alt="pytest: 19 passed" /></a>
@@ -57,20 +58,29 @@
 
 ---
 
-## 📦 Installation
+## 📦 Installation & Packaging
 
-Clone the `python` branch and install locally:
+### Option 1: Direct Install via Wheel (Windows AMD64 / Universal)
+
+Download the pre-compiled `.whl` from the [Latest GitHub Release](https://github.com/QuantumTechCoder/FantasticFractals/releases) and install via pip:
+
+```powershell
+pip install https://github.com/QuantumTechCoder/FantasticFractals/releases/download/v1.0.0-python/fantasticfractals-1.0.0-py3-none-win_amd64.whl
+```
+
+### Option 2: Clone & Build from Source
 
 ```bash
-# Clone the python branch
+# 1. Clone the python branch
 git clone -b python https://github.com/QuantumTechCoder/FantasticFractals.git
 cd FantasticFractals
 
-# Install in editable mode
+# 2. Install in editable mode
 pip install -e .
 
-# Or install dependencies directly
-pip install numpy pillow
+# 3. Or build standalone distributions using setuptools and wheel:
+python setup.py sdist bdist_wheel
+twine check dist/*
 ```
 
 ---
