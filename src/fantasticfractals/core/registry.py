@@ -240,8 +240,8 @@ FRACTAL_REGISTRY: Dict[str, FractalMeta] = {
         description="Infinite perimeter enclosing finite area. Continuous everywhere but nowhere differentiable.",
         default_center=(0.0, 0.0),
         default_zoom=0.85,
-        default_iterations=7,
-        max_iterations=14,
+        default_iterations=4,
+        max_iterations=8,
     ),
     "vicsek": FractalMeta(
         id="vicsek",
@@ -262,8 +262,8 @@ FRACTAL_REGISTRY: Dict[str, FractalMeta] = {
         description="Classic planar square matrix with fractional Hausdorff dimension ~1.8928.",
         default_center=(0.5, 0.5),
         default_zoom=1.0,
-        default_iterations=7,
-        max_iterations=14,
+        default_iterations=4,
+        max_iterations=8,
     ),
     "cantor_dust": FractalMeta(
         id="cantor_dust",

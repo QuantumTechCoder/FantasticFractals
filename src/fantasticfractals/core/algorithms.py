@@ -378,29 +378,24 @@ def compute_grid(
         n2y = -0.5
         px += 0.5
 
-        depth = min(max_iterations, 12)
-        active = np.ones(C.shape, dtype=bool)
+        scale = 1.0
+        depth = max(1, min(max_iterations, 8))
 
         for d in range(depth):
-            if not np.any(active):
-                break
-            px_act = px[active] * 3.0
-            py_act = py[active] * 3.0
-            px_act = np.abs(px_act - 1.5) - 0.5
+            px = px * 3.0
+            py = py * 3.0
+            scale *= 3.0
+            px = np.abs(px - 1.5) - 0.5
 
-            d2 = px_act * n2x + py_act * n2y
+            d2 = px * n2x + py * n2y
             refl2 = d2 < 0
-            px_act[refl2] -= 2.0 * d2[refl2] * n2x
-            py_act[refl2] -= 2.0 * d2[refl2] * n2y
+            px[refl2] -= 2.0 * d2[refl2] * n2x
+            py[refl2] -= 2.0 * d2[refl2] * n2y
 
-            px[active] = px_act
-            py[active] = py_act
-
-            escaped = py_act > 0
-            if np.any(escaped):
-                act_coords = np.where(active)[0][escaped], np.where(active)[1][escaped]
-                iters[act_coords] = float(d + 1) * 16.0
-                active[act_coords] = False
+        outside = py > 0
+        dist = py[outside] / scale
+        iters[outside] = np.log1p(dist * 60.0) * 22.0 + float(depth) * 12.0
+        iters[~outside] = -1.0
 
         return iters
 
