@@ -8,7 +8,10 @@
     <a href="https://pypi.org/project/fantasticfractals/"><img src="https://img.shields.io/pypi/v/fantasticfractals?color=blue&style=flat-square&logo=pypi&logoColor=white" alt="PyPI Package" /></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-slate?style=flat-square" alt="License: MIT" /></a>
   </p>
-  <p>👉 <strong><a href="https://fantasticfractals.pages.dev">Launch Live Web App in Browser →</a></strong></p>
+  <p>
+    👉 <strong><a href="https://fantasticfractals.pages.dev">Launch Live Web App in Browser →</a></strong> &nbsp;•&nbsp;
+    <a href="https://colab.research.google.com/github/QuantumTechCoder/FantasticFractals/blob/python/notebooks/quickstart.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style="vertical-align: middle; display: inline;" /></a>
+  </p>
 </div>
 
 > [!IMPORTANT]
