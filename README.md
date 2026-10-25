@@ -21,7 +21,7 @@
 > | :--- | :---: | :--- | :---: |
 > | **`main`** | 🟢 Active | **Central Navigation Hub & Roadmap**. Overview documentation index. *(You are here)* | [View Index](https://github.com/QuantumTechCoder/FantasticFractals) |
 > | **`website`** | 🚀 **Live** | **Web Application & Edge API**. React 18, Vite, WebGL 2.0 shaders, Tailwind CSS, Cloudflare Pages Functions. | **[Explore `website` Branch →](https://github.com/QuantumTechCoder/FantasticFractals/tree/website)** |
-> | **`python`** | 🟢 **Active** | **Scientific Library & CLI**. Vectorized NumPy computation, 16K export, box dimension analysis. | **[Explore `python` Branch →](https://github.com/QuantumTechCoder/FantasticFractals/tree/python)** |
+> | **`python`** | 🟢 **Active** | **Scientific Library & CLI**. Vectorized NumPy computation, 16K export, Windows AMD64 wheel. | **[Explore `python` Branch →](https://github.com/QuantumTechCoder/FantasticFractals/tree/python)**<br>*(or [Download Release v1.0.0](https://github.com/QuantumTechCoder/FantasticFractals/releases/tag/v1.0.0-python))* |
 > | *`nodejs`* | 🛠️ *Planned* | **NPM Package & Utilities**. Standalone procedural rendering engine and CLI for asset generation. | *Coming Soon* |
 >
 > ```bash
