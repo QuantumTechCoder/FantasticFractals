@@ -203,20 +203,28 @@ void main() {
       }
     }
   } else if (u_fractalType == 10) {
-    // 11. Koch Snowflake
-    vec2 p = abs(c);
-    for (int d = 0; d < 8; d++) {
+    // 11. Koch Snowflake (Authentic 6-fold KIFS Folding)
+    vec2 p = vec2(abs(c.x), -c.y);
+    const vec2 n1 = vec2(0.5, -0.8660254038);
+    p.y -= 0.2886751346;
+    float d1 = (p.x - 0.5) * n1.x + p.y * n1.y;
+    if (d1 > 0.0) {
+      p -= 2.0 * d1 * n1;
+    }
+    const vec2 n2 = vec2(0.8660254038, -0.5);
+    p.x += 0.5;
+    for (int d = 0; d < 12; d++) {
       if (d >= u_maxIterations) break;
-      p = abs(p);
-      float dDot = -0.8660254 * p.x + 0.5 * p.y;
-      if (dDot > 0.0) {
-        p += 2.0 * dDot * vec2(0.8660254, -0.5);
-      }
-      p.x -= 0.5;
       p *= 3.0;
-      p.x += 0.5;
-      if (dot(p, p) > 4.0) {
-        iterVal = float(d + 1) * 18.0;
+      p.x -= 1.5;
+      p.x = abs(p.x);
+      p.x -= 0.5;
+      float d2 = p.x * n2.x + p.y * n2.y;
+      if (d2 < 0.0) {
+        p -= 2.0 * d2 * n2;
+      }
+      if (p.y > 0.0) {
+        iterVal = float(d + 1) * 16.0;
         break;
       }
     }

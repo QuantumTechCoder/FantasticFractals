@@ -619,20 +619,31 @@ export function computePoint(type, x0, y0, maxIter, params = {}) {
 
     case 'koch_snowflake': {
       let px = Math.abs(x0);
-      let py = Math.abs(y0);
-      const depth = Math.min(maxIter, 8);
+      let py = -y0;
+      const n1x = 0.5;
+      const n1y = -0.8660254038;
+      py -= 0.2886751346;
+      const d1 = (px - 0.5) * n1x + py * n1y;
+      if (d1 > 0) {
+        px -= 2.0 * d1 * n1x;
+        py -= 2.0 * d1 * n1y;
+      }
+      const n2x = 0.8660254038;
+      const n2y = -0.5;
+      px += 0.5;
+      const depth = Math.min(maxIter, 12);
       for (let d = 0; d < depth; d++) {
-        px = Math.abs(px); py = Math.abs(py);
-        const dDot = -0.8660254 * px + 0.5 * py;
-        if (dDot > 0) {
-          px += 2.0 * dDot * 0.8660254;
-          py -= 2.0 * dDot * 0.5;
-        }
-        px -= 0.5;
         px *= 3.0;
         py *= 3.0;
-        px += 0.5;
-        if (px * px + py * py > 4.0) return (d + 1) * 18.0;
+        px -= 1.5;
+        px = Math.abs(px);
+        px -= 0.5;
+        const d2 = px * n2x + py * n2y;
+        if (d2 < 0) {
+          px -= 2.0 * d2 * n2x;
+          py -= 2.0 * d2 * n2y;
+        }
+        if (py > 0) return (d + 1) * 16.0;
       }
       return -1;
     }
