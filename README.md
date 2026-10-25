@@ -5,7 +5,7 @@
     <a href="https://fantasticfractals.pages.dev"><img src="https://img.shields.io/badge/Live_App-fantasticfractals.pages.dev-0284c7?style=flat-square&logo=cloudflare" alt="Live App" /></a>
     <a href="https://fantasticfractals.pages.dev"><img src="https://img.shields.io/badge/WebGL_2.0-60_FPS-4f46e5?style=flat-square&logo=webgl" alt="WebGL 2.0" /></a>
     <a href="https://github.com/QuantumTechCoder/FantasticFractals/tree/website"><img src="https://img.shields.io/badge/React_%2B_Vite-646CFF?style=flat-square&logo=react&logoColor=61dafb" alt="React + Vite" /></a>
-    <a href="https://github.com/QuantumTechCoder/FantasticFractals/tree/python"><img src="https://img.shields.io/badge/Python-Library_%26_CLI-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python Library" /></a>
+    <a href="https://pypi.org/project/fantasticfractals/"><img src="https://img.shields.io/pypi/v/fantasticfractals?color=blue&style=flat-square&logo=pypi&logoColor=white" alt="PyPI Package" /></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-slate?style=flat-square" alt="License: MIT" /></a>
   </p>
   <p>👉 <strong><a href="https://fantasticfractals.pages.dev">Launch Live Web App in Browser →</a></strong></p>
@@ -21,7 +21,7 @@
 > | :--- | :---: | :--- | :---: |
 > | **`main`** | 🟢 Active | **Central Navigation Hub & Roadmap**. Overview documentation index. *(You are here)* | [View Index](https://github.com/QuantumTechCoder/FantasticFractals) |
 > | **`website`** | 🚀 **Live** | **Web Application & Edge API**. React 18, Vite, WebGL 2.0 shaders, Tailwind CSS, Cloudflare Pages Functions. | **[Explore `website` Branch →](https://github.com/QuantumTechCoder/FantasticFractals/tree/website)** |
-> | **`python`** | 🟢 **Active** | **Scientific Library & CLI**. Vectorized NumPy computation, 16K export, Windows AMD64 wheel. | **[Explore `python` Branch →](https://github.com/QuantumTechCoder/FantasticFractals/tree/python)**<br>*(or [Download Release v1.0.0](https://github.com/QuantumTechCoder/FantasticFractals/releases/tag/v1.0.0-python))* |
+> | **`python`** | 🟢 **Active** | **Scientific Library & CLI**. Vectorized NumPy computation, 16K export, Windows AMD64 wheel. | **[Explore `python` Branch →](https://github.com/QuantumTechCoder/FantasticFractals/tree/python)**<br>*(or `pip install fantasticfractals` / [PyPI](https://pypi.org/project/fantasticfractals/))* |
 > | *`nodejs`* | 🛠️ *Planned* | **NPM Package & Utilities**. Standalone procedural rendering engine and CLI for asset generation. | *Coming Soon* |
 >
 > ```bash
