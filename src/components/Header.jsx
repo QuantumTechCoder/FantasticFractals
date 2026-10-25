@@ -108,13 +108,14 @@ export function Header({
           <RotateCcw className="w-4 h-4" />
         </button>
 
-        {/* Share */}
+        {/* Share Discovery & Download */}
         <button
           onClick={onShare}
-          className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
-          title="Copy Shareable Link"
+          className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-indigo-500/20 to-cyan-500/20 hover:from-indigo-500/30 hover:to-cyan-500/30 text-indigo-200 hover:text-white border border-indigo-500/40 transition-all shadow-sm"
+          title="Share Coordinates & Export Wallpapers"
         >
-          <Share2 className="w-4 h-4" />
+          <Share2 className="w-3.5 h-3.5 text-cyan-400" />
+          <span className="hidden sm:inline">Share</span>
         </button>
 
         {/* Fullscreen */}

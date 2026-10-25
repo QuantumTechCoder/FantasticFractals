@@ -47,6 +47,34 @@ export default function App() {
   const renderJobIdRef = useRef(0);
   const activeLutKeyRef = useRef('');
 
+  // Synchronize current view coordinates and parameters into the browser URL
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      const url = new URL(window.location);
+      url.searchParams.set('type', fractalType);
+      url.searchParams.set('cx', centerX.toFixed(8));
+      url.searchParams.set('cy', centerY.toFixed(8));
+      url.searchParams.set('zoom', zoom.toString());
+      url.searchParams.set('iter', iterations.toString());
+      url.searchParams.set('palette', palette);
+      if (paletteShift !== 0) {
+        url.searchParams.set('shift', paletteShift.toFixed(2));
+      } else {
+        url.searchParams.delete('shift');
+      }
+      if (fractalType === 'julia') {
+        url.searchParams.set('jr', juliaReal.toFixed(5));
+        url.searchParams.set('ji', juliaImag.toFixed(5));
+      } else {
+        url.searchParams.delete('jr');
+        url.searchParams.delete('ji');
+      }
+      window.history.replaceState({}, '', url.toString());
+    }, 300);
+
+    return () => clearTimeout(handler);
+  }, [fractalType, centerX, centerY, zoom, iterations, palette, paletteShift, juliaReal, juliaImag]);
+
   // Initialize WebGL Renderer on mount
   useEffect(() => {
     if (glCanvasRef.current) {
