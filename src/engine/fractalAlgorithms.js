@@ -211,9 +211,9 @@ export const FRACTAL_TYPES = [
     category: 'Geometric / IFS',
     formula: 'p_{n+1} = 2p_n - v_i',
     description: 'Classic self-similar triangular fractal with Hausdorff dimension log_2(3) ~ 1.585.',
-    defaultCenter: { x: 0.0, y: 0.3 },
+    defaultCenter: { x: 0.0, y: 0.25 },
     defaultZoom: 0.85,
-    defaultIterations: 9,
+    defaultIterations: 8,
     maxIterations: 14,
   },
   {
@@ -600,19 +600,39 @@ export function computePoint(type, x0, y0, maxIter, params = {}) {
     }
 
     case 'sierpinski_triangle': {
-      let px = Math.abs(x0);
-      let py = y0 + 0.5;
-      const depth = Math.min(maxIter, 12);
+      const v1x = 0.0, v1y = 1.0;
+      const v2x = -0.8660254038, v2y = -0.5;
+      const v3x = 0.8660254038, v3y = -0.5;
+
+      let px = x0;
+      let py = y0;
+      let d1 = px * v1x + py * v1y;
+      let d2 = px * v2x + py * v2y;
+      let d3 = px * v3x + py * v3y;
+      const minD = Math.min(d1, d2, d3);
+
+      if (minD < -0.5) {
+        const dist = -0.5 - minD;
+        return Math.log1p(dist * 30.0) * 20.0 + 1.0;
+      }
+
+      const depth = Math.min(maxIter, 14);
       for (let d = 0; d < depth; d++) {
-        if (px < 0) px = -px;
-        const t = 0.5 * (px * 1.7320508 - py);
-        if (t > 0) {
-          px -= 1.7320508 * t;
-          py += t;
+        d1 = px * v1x + py * v1y;
+        d2 = px * v2x + py * v2y;
+        d3 = px * v3x + py * v3y;
+        const maxD = Math.max(d1, d2, d3);
+        if (maxD < 0.25) {
+          return (d + 1) * 16.0;
         }
-        px = px * 2.0 - 0.0;
-        py = py * 2.0 - 1.7320508;
-        if (px * px + py * py > 4.0) return (d + 1) * 14.0;
+        let vx = v1x, vy = v1y;
+        if (d2 === maxD) {
+          vx = v2x; vy = v2y;
+        } else if (d3 === maxD) {
+          vx = v3x; vy = v3y;
+        }
+        px = 2.0 * px - vx;
+        py = 2.0 * py - vy;
       }
       return -1;
     }

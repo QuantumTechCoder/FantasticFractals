@@ -187,19 +187,34 @@ void main() {
     }
   } else if (u_fractalType == 9) {
     // 10. Sierpinski Triangle (Gasket)
-    vec2 p = vec2(abs(c.x), c.y + 0.5);
-    for (int d = 0; d < 12; d++) {
-      if (d >= u_maxIterations) break;
-      if (p.x < 0.0) p.x = -p.x;
-      float t = 0.5 * (p.x * 1.7320508 - p.y);
-      if (t > 0.0) {
-        p.x -= 1.7320508 * t;
-        p.y += t;
-      }
-      p = p * 2.0 - vec2(0.0, 1.7320508);
-      if (dot(p, p) > 4.0) {
-        iterVal = float(d + 1) * 14.0;
-        break;
+    const vec2 v1 = vec2(0.0, 1.0);
+    const vec2 v2 = vec2(-0.8660254038, -0.5);
+    const vec2 v3 = vec2(0.8660254038, -0.5);
+
+    vec2 p = c;
+    float d1 = dot(p, v1);
+    float d2 = dot(p, v2);
+    float d3 = dot(p, v3);
+    float minD = min(d1, min(d2, d3));
+
+    if (minD < -0.5) {
+      float dist = -0.5 - minD;
+      iterVal = log(1.0 + dist * 30.0) * 20.0 + 1.0;
+    } else {
+      for (int d = 0; d < 14; d++) {
+        if (d >= u_maxIterations) break;
+        d1 = dot(p, v1);
+        d2 = dot(p, v2);
+        d3 = dot(p, v3);
+        float maxD = max(d1, max(d2, d3));
+        if (maxD < 0.25) {
+          iterVal = float(d + 1) * 16.0;
+          break;
+        }
+        vec2 v = v1;
+        if (d2 == maxD) v = v2;
+        else if (d3 == maxD) v = v3;
+        p = 2.0 * p - v;
       }
     }
   } else if (u_fractalType == 10) {
