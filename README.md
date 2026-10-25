@@ -1,21 +1,13 @@
 <div align="center">
-
-# 🌀 FantasticFractals
-
-**High-speed real-time fractal visualizer, animated evolution slideshow & mathematical playground.**
-
-[![Live App](https://img.shields.io/badge/Live_App-fantasticfractals.pages.dev-0284c7?style=flat-square&logo=cloudflare)](https://fantasticfractals.pages.dev)
-[![WebGL 2.0](https://img.shields.io/badge/WebGL_2.0-60_FPS-4f46e5?style=flat-square&logo=webgl)](https://fantasticfractals.pages.dev)
-[![License: MIT](https://img.shields.io/badge/License-MIT-slate?style=flat-square)](LICENSE)
-
-<br/>
-
-👉 **[Launch Live Web App in Browser →](https://fantasticfractals.pages.dev)**
-
-<br/>
-
----
-
+  <h1>🌀 FantasticFractals</h1>
+  <p><strong>High-speed real-time fractal visualizer, animated evolution slideshow & mathematical playground.</strong></p>
+  <p>
+    <a href="https://fantasticfractals.pages.dev"><img src="https://img.shields.io/badge/Live_App-fantasticfractals.pages.dev-0284c7?style=flat-square&logo=cloudflare" alt="Live App" /></a>
+    <a href="https://fantasticfractals.pages.dev"><img src="https://img.shields.io/badge/WebGL_2.0-60_FPS-4f46e5?style=flat-square&logo=webgl" alt="WebGL 2.0" /></a>
+    <a href="https://github.com/QuantumTechCoder/FantasticFractals/tree/website"><img src="https://img.shields.io/badge/React_%2B_Vite-646CFF?style=flat-square&logo=react&logoColor=61dafb" alt="React + Vite" /></a>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-slate?style=flat-square" alt="License: MIT" /></a>
+  </p>
+  <p>👉 <strong><a href="https://fantasticfractals.pages.dev">Launch Live Web App in Browser →</a></strong></p>
 </div>
 
 > [!IMPORTANT]
