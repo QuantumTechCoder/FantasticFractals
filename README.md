@@ -152,9 +152,9 @@ Returns JSON metadata and coordinate presets for famous fractal landmarks.
 
 ## 🌿 Project Branches
 
-- **`main`**: Central repository documentation index.
-- **`website`**: React + Vite frontend and Cloudflare Pages Functions edge API (this branch).
-- *`python`* *(Planned)*: Scientific computing library and high-precision export CLI.
+- **`main`**: [Central repository documentation index](https://github.com/QuantumTechCoder/FantasticFractals).
+- **`website`**: [React + Vite frontend and Cloudflare Pages Functions edge API](https://github.com/QuantumTechCoder/FantasticFractals/tree/website) (this branch).
+- **`python`**: [Scientific computing library, 16K image exporter, and CLI](https://github.com/QuantumTechCoder/FantasticFractals/tree/python).
 - *`nodejs`* *(Planned)*: Standalone Node.js procedural generation package.
 
 ---
