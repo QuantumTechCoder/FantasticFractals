@@ -1,11 +1,22 @@
+<div align="center">
+
 # 🌀 FantasticFractals
 
-> An interactive, real-time fractal generator and evolution visualizer powered by **React**, **Vite**, and **WebGL 2.0 GPU shaders**.
+**High-speed real-time fractal visualizer, animated evolution slideshow & mathematical playground.**
 
-🌐 **Live Application**: [fantasticfractals.pages.dev](https://fantasticfractals.pages.dev)  
-🌿 **Active Codebase**: [`website` branch](https://github.com/QuantumTechCoder/FantasticFractals/tree/website)
+[![Live App](https://img.shields.io/badge/Live_App-fantasticfractals.pages.dev-0284c7?style=flat-square&logo=cloudflare)](https://fantasticfractals.pages.dev)
+[![WebGL 2.0](https://img.shields.io/badge/WebGL_2.0-60_FPS-4f46e5?style=flat-square&logo=webgl)](https://fantasticfractals.pages.dev)
+[![License: MIT](https://img.shields.io/badge/License-MIT-slate?style=flat-square)](LICENSE)
+
+<br/>
+
+👉 **[Launch Live Web App in Browser →](https://fantasticfractals.pages.dev)**
+
+<br/>
 
 ---
+
+</div>
 
 > [!IMPORTANT]
 > ### 📍 Where is the source code?
@@ -149,6 +160,6 @@ Visit `http://localhost:5173` to explore fractals locally!
 
 <div align="center">
 
-Made with 💜 and mathematics • Released under the [MIT License](LICENSE)
+Made with 💜 and mathematics • Powered by [Cloudflare Pages](https://fantasticfractals.pages.dev) • Licensed under [MIT](LICENSE)
 
 </div>
