@@ -11,15 +11,20 @@
 </div>
 
 > [!IMPORTANT]
-> ### 📍 Where is the source code?
+> ### 📍 Repository Ecosystem & Branch Directory
 > **FantasticFractals** is structured as an **isolated multi-branch ecosystem** to keep target environments lightweight and modular.
 >
 > The full production codebase — including the **React + Vite** frontend, **hardware-accelerated WebGL 2.0 fragment shaders**, and **Cloudflare Pages Functions** serverless edge API — lives entirely in the **[`website`](https://github.com/QuantumTechCoder/FantasticFractals/tree/website)** branch!
 >
-> 🚀 **[Click here to explore the `website` branch source code & documentation →](https://github.com/QuantumTechCoder/FantasticFractals/tree/website)**
+> | Branch | Status | Description & Stack | Direct Link |
+> | :--- | :---: | :--- | :---: |
+> | **`main`** | 🟢 Active | **Central Navigation Hub & Roadmap**. Overview documentation index. *(You are here)* | [View Index](https://github.com/QuantumTechCoder/FantasticFractals) |
+> | **`website`** | 🚀 **Live** | **Web Application & Edge API**. React 18, Vite, WebGL 2.0 shaders, Tailwind CSS, Cloudflare Pages Functions. | **[Explore `website` Branch →](https://github.com/QuantumTechCoder/FantasticFractals/tree/website)** |
+> | *`python`* | 🛠️ *Planned* | **Scientific Library & CLI**. Arbitrary-precision NumPy matrices, Numba JIT kernels, automated exports. | *Coming Soon* |
+> | *`nodejs`* | 🛠️ *Planned* | **NPM Package & Utilities**. Standalone procedural rendering engine and CLI for asset generation. | *Coming Soon* |
 >
 > ```bash
-> # To clone the web application directly:
+> # Clone the web application directly:
 > git clone -b website https://github.com/QuantumTechCoder/FantasticFractals.git
 > ```
 
@@ -104,19 +109,6 @@ Instantly jump between 27 iconic fractals with instant fuzzy typing, category ch
 | **Dynamical Systems** | **Barnsley Fern IFS** | Stochastic affine biological transformation | 🖥️ Canvas 2D |
 
 </details>
-
----
-
-## 🌿 Repository Ecosystem & Branch Directory
-
-This repository employs dedicated branches for each target platform to maintain maximum modularity:
-
-| Branch | Status | Description & Stack | Direct Link |
-| :--- | :---: | :--- | :---: |
-| **`main`** | 🟢 Active | **Central Navigation Hub & Roadmap**. Overview documentation index. *(You are here)* | [View Index](https://github.com/QuantumTechCoder/FantasticFractals) |
-| **`website`** | 🚀 **Live** | **Web Application & Edge API**. React 18, Vite, WebGL 2.0 shaders, Tailwind CSS, and Cloudflare Pages Functions. | **[Explore `website` Branch →](https://github.com/QuantumTechCoder/FantasticFractals/tree/website)** |
-| *`python`* | 🛠️ *Planned* | **Scientific Library & CLI**. Arbitrary-precision NumPy matrices, Numba JIT kernels, and automated PNG/TIFF export scripts. | *Coming Soon* |
-| *`nodejs`* | 🛠️ *Planned* | **NPM Package & Utilities**. Standalone procedural rendering engine and CLI for backend asset generation. | *Coming Soon* |
 
 ---
 
