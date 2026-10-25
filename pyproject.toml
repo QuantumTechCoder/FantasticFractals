@@ -8,7 +8,7 @@ version = "1.0.0"
 description = "High-performance mathematical fractal generator, arbitrary-precision deep zoom engine, and 4K/video exporter."
 readme = "README.md"
 requires-python = ">=3.9"
-license = { text = "MIT" }
+license = "MIT"
 authors = [
   { name = "FantasticFractals Contributors" }
 ]
@@ -31,7 +31,8 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Mathematics",
   "Topic :: Scientific/Engineering :: Visualization",
   "Topic :: Multimedia :: Graphics",
-  "License :: OSI Approved :: MIT License",
+  "Operating System :: Microsoft :: Windows",
+  "Environment :: Win32 (MS Windows)",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",

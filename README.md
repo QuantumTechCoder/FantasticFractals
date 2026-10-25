@@ -78,8 +78,9 @@ cd FantasticFractals
 # 2. Install in editable mode
 pip install -e .
 
-# 3. Or build standalone distributions using setuptools and wheel:
-python setup.py sdist bdist_wheel
+# 3. Or build standalone distributions using build and wheel (PEP 517 / pyproject.toml):
+pip install build wheel twine
+python -m build
 twine check dist/*
 ```
 
