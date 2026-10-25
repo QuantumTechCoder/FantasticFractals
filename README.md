@@ -1,30 +1,11 @@
-<div align="center">
+# 🌀 FantasticFractals
 
-# 🌀 FantasticFractals 🌀
+> An interactive, real-time fractal generator and evolution visualizer powered by **React**, **Vite**, and **WebGL 2.0 GPU shaders**.
 
-### *High-Speed Real-Time Fractal Explorer, Evolution Animator & Mathematical Playground*
-
-[![Live Website](https://img.shields.io/badge/🌐_Live_App-fantasticfractals.pages.dev-00f0ff?style=for-the-badge&logo=cloudflare&logoColor=white)](https://fantasticfractals.pages.dev)
-[![Production Branch](https://img.shields.io/badge/🌿_Codebase-website_branch-6366f1?style=for-the-badge&logo=git&logoColor=white)](https://github.com/QuantumTechCoder/FantasticFractals/tree/website)
-
-<br/>
-
-[![Cloudflare Pages](https://img.shields.io/badge/Cloudflare_Pages-F38020?style=flat-square&logo=cloudflare&logoColor=white)](https://fantasticfractals.pages.dev)
-[![WebGL 2.0](https://img.shields.io/badge/WebGL_2.0-GPU_Accelerated-990000?style=flat-square&logo=webgl&logoColor=white)](https://fantasticfractals.pages.dev)
-[![React 18](https://img.shields.io/badge/React-18.3-61DAFB?style=flat-square&logo=react&logoColor=black)](https://fantasticfractals.pages.dev)
-[![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=flat-square&logo=vite&logoColor=white)](https://fantasticfractals.pages.dev)
-[![Performance](https://img.shields.io/badge/Render_Speed-2ms_%2F_60_FPS-00e676?style=flat-square&logo=speedtest&logoColor=white)](https://fantasticfractals.pages.dev)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
-
-<br/>
-
-**[⚡ Try It in Your Browser (No Installation Required) →](https://fantasticfractals.pages.dev)**
-
-<br/>
+🌐 **Live Application**: [fantasticfractals.pages.dev](https://fantasticfractals.pages.dev)  
+🌿 **Active Codebase**: [`website` branch](https://github.com/QuantumTechCoder/FantasticFractals/tree/website)
 
 ---
-
-</div>
 
 > [!IMPORTANT]
 > ### 📍 Where is the source code?
@@ -168,8 +149,6 @@ Visit `http://localhost:5173` to explore fractals locally!
 
 <div align="center">
 
-Made with 💜 and mathematics • Powered by [Cloudflare Pages](https://fantasticfractals.pages.dev)
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+Made with 💜 and mathematics • Released under the [MIT License](LICENSE)
 
 </div>
