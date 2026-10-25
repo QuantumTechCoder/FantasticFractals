@@ -224,8 +224,8 @@ export const FRACTAL_TYPES = [
     description: 'Infinite perimeter enclosing finite area. Continuous everywhere but nowhere differentiable.',
     defaultCenter: { x: 0.0, y: 0.0 },
     defaultZoom: 0.85,
-    defaultIterations: 7,
-    maxIterations: 12,
+    defaultIterations: 4,
+    maxIterations: 8,
   },
   {
     id: 'vicsek',
@@ -246,8 +246,8 @@ export const FRACTAL_TYPES = [
     description: 'Classic planar square matrix with fractional Hausdorff dimension ~1.8928.',
     defaultCenter: { x: 0.5, y: 0.5 },
     defaultZoom: 1.0,
-    defaultIterations: 7,
-    maxIterations: 12,
+    defaultIterations: 4,
+    maxIterations: 8,
   },
   {
     id: 'cantor_dust',
@@ -631,10 +631,12 @@ export function computePoint(type, x0, y0, maxIter, params = {}) {
       const n2x = 0.8660254038;
       const n2y = -0.5;
       px += 0.5;
-      const depth = Math.min(maxIter, 12);
+      let scale = 1.0;
+      const depth = Math.max(1, Math.min(maxIter, 8));
       for (let d = 0; d < depth; d++) {
         px *= 3.0;
         py *= 3.0;
+        scale *= 3.0;
         px -= 1.5;
         px = Math.abs(px);
         px -= 0.5;
@@ -643,9 +645,10 @@ export function computePoint(type, x0, y0, maxIter, params = {}) {
           px -= 2.0 * d2 * n2x;
           py -= 2.0 * d2 * n2y;
         }
-        if (py > 0) return (d + 1) * 16.0;
       }
-      return -1;
+      if (py <= 0) return -1;
+      const dist = py / scale;
+      return Math.log1p(dist * 60.0) * 22.0 + depth * 12.0;
     }
 
     case 'vicsek': {

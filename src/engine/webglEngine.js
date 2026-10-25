@@ -213,9 +213,12 @@ void main() {
     }
     const vec2 n2 = vec2(0.8660254038, -0.5);
     p.x += 0.5;
-    for (int d = 0; d < 12; d++) {
-      if (d >= u_maxIterations) break;
+    float scale = 1.0;
+    int depth = clamp(u_maxIterations, 1, 8);
+    for (int d = 0; d < 8; d++) {
+      if (d >= depth) break;
       p *= 3.0;
+      scale *= 3.0;
       p.x -= 1.5;
       p.x = abs(p.x);
       p.x -= 0.5;
@@ -223,10 +226,12 @@ void main() {
       if (d2 < 0.0) {
         p -= 2.0 * d2 * n2;
       }
-      if (p.y > 0.0) {
-        iterVal = float(d + 1) * 16.0;
-        break;
-      }
+    }
+    if (p.y <= 0.0) {
+      iterVal = -1.0;
+    } else {
+      float dist = p.y / scale;
+      iterVal = log(1.0 + dist * 60.0) * 22.0 + float(depth) * 12.0;
     }
   } else if (u_fractalType == 11) {
     // 12. Vicsek Fractal (Box Cross)
