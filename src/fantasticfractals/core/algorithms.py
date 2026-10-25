@@ -364,27 +364,42 @@ def compute_grid(
     elif fid == "koch_snowflake":
         iters = np.full(C.shape, -1.0, dtype=np.float64)
         px = np.abs(X)
-        py = np.abs(Y)
-        depth = min(max_iterations, 8)
+        py = -Y
+
+        n1x = 0.5
+        n1y = -0.8660254038
+        py = py - 0.2886751346
+        d1 = (px - 0.5) * n1x + py * n1y
+        refl1 = d1 > 0
+        px[refl1] -= 2.0 * d1[refl1] * n1x
+        py[refl1] -= 2.0 * d1[refl1] * n1y
+
+        n2x = 0.8660254038
+        n2y = -0.5
+        px += 0.5
+
+        depth = min(max_iterations, 12)
         active = np.ones(C.shape, dtype=bool)
 
         for d in range(depth):
             if not np.any(active):
                 break
-            px_act = px[active]
-            py_act = py[active]
-            d_dot = -0.8660254 * px_act + 0.5 * py_act
-            refl = d_dot > 0
-            px_act[refl] += 2.0 * d_dot[refl] * 0.8660254
-            py_act[refl] -= 2.0 * d_dot[refl] * 0.5
-            px_act = (px_act - 0.5) * 3.0 + 0.5
-            py_act = py_act * 3.0
+            px_act = px[active] * 3.0
+            py_act = py[active] * 3.0
+            px_act = np.abs(px_act - 1.5) - 0.5
+
+            d2 = px_act * n2x + py_act * n2y
+            refl2 = d2 < 0
+            px_act[refl2] -= 2.0 * d2[refl2] * n2x
+            py_act[refl2] -= 2.0 * d2[refl2] * n2y
+
             px[active] = px_act
             py[active] = py_act
-            escaped = (px_act ** 2 + py_act ** 2) > 4.0
+
+            escaped = py_act > 0
             if np.any(escaped):
                 act_coords = np.where(active)[0][escaped], np.where(active)[1][escaped]
-                iters[act_coords] = float(d + 1) * 18.0
+                iters[act_coords] = float(d + 1) * 16.0
                 active[act_coords] = False
 
         return iters
