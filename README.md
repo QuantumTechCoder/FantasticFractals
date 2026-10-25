@@ -12,7 +12,8 @@
   </p>
   <p>
     🌐 <strong><a href="https://fantasticfractals.pages.dev">Try the Live Web App (WebGL 2.0)</a></strong> | 
-    📂 <strong><a href="https://github.com/QuantumTechCoder/FantasticFractals">Main Navigation Hub</a></strong>
+    📂 <strong><a href="https://github.com/QuantumTechCoder/FantasticFractals">Main Navigation Hub</a></strong> |
+    <a href="https://colab.research.google.com/github/QuantumTechCoder/FantasticFractals/blob/python/notebooks/quickstart.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style="vertical-align: middle; display: inline;" /></a>
   </p>
 </div>
 
