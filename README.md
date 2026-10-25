@@ -2,6 +2,7 @@
   <h1>🌀 FantasticFractals (Python Library & CLI)</h1>
   <p><strong>Vectorized NumPy fractal rendering engine, scientific analysis suite, 4K/8K/16K image exporter & zoom dive generator.</strong></p>
   <p>
+    <a href="https://pypi.org/project/fantasticfractals/"><img src="https://img.shields.io/pypi/v/fantasticfractals?color=blue&style=flat-square&logo=pypi&logoColor=white" alt="PyPI Version" /></a>
     <a href="https://github.com/QuantumTechCoder/FantasticFractals/tree/python"><img src="https://img.shields.io/badge/Python-3.9+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python 3.9+" /></a>
     <a href="https://github.com/QuantumTechCoder/FantasticFractals/releases"><img src="https://img.shields.io/badge/Platform-Windows_AMD64-0078D6?style=flat-square&logo=windows" alt="Windows AMD64" /></a>
     <a href="https://numpy.org"><img src="https://img.shields.io/badge/NumPy-Vectorized-013243?style=flat-square&logo=numpy" alt="NumPy Vectorized" /></a>
@@ -60,15 +61,21 @@
 
 ## 📦 Installation & Packaging
 
-### Option 1: Direct Install via Wheel (Windows AMD64 / Universal)
+### Option 1: Standard Install via PyPI (Recommended)
 
-Download the pre-compiled `.whl` from the [Latest GitHub Release](https://github.com/QuantumTechCoder/FantasticFractals/releases) and install via pip:
+```bash
+pip install fantasticfractals
+```
+
+### Option 2: Pre-compiled Wheel (Windows AMD64)
+
+Download the pre-compiled `.whl` from the [Latest GitHub Release](https://github.com/QuantumTechCoder/FantasticFractals/releases) or install via URL:
 
 ```powershell
 pip install https://github.com/QuantumTechCoder/FantasticFractals/releases/download/v1.0.0-python/fantasticfractals-1.0.0-py3-none-win_amd64.whl
 ```
 
-### Option 2: Clone & Build from Source
+### Option 3: Clone & Build from Source
 
 ```bash
 # 1. Clone the python branch
