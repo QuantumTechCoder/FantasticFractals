@@ -1,38 +1,35 @@
 <div align="center">
-  <h1>🌀 FantasticFractals</h1>
-  <p><strong>High-speed real-time fractal visualizer, animated evolution slideshow & mathematical playground.</strong></p>
+  <h1>🌀 FantasticFractals (Python Library & CLI)</h1>
+  <p><strong>Vectorized NumPy fractal rendering engine, scientific analysis suite, 4K/8K/16K image exporter & zoom dive generator.</strong></p>
   <p>
-    <a href="https://fantasticfractals.pages.dev"><img src="https://img.shields.io/badge/Live_App-fantasticfractals.pages.dev-0284c7?style=flat-square&logo=cloudflare" alt="Live App" /></a>
-    <a href="https://fantasticfractals.pages.dev"><img src="https://img.shields.io/badge/WebGL_2.0-60_FPS-4f46e5?style=flat-square&logo=webgl" alt="WebGL 2.0" /></a>
-    <a href="https://github.com/QuantumTechCoder/FantasticFractals/tree/website"><img src="https://img.shields.io/badge/React_%2B_Vite-646CFF?style=flat-square&logo=react&logoColor=61dafb" alt="React + Vite" /></a>
+    <a href="https://github.com/QuantumTechCoder/FantasticFractals/tree/python"><img src="https://img.shields.io/badge/Python-3.9+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python 3.9+" /></a>
+    <a href="https://numpy.org"><img src="https://img.shields.io/badge/NumPy-Vectorized-013243?style=flat-square&logo=numpy" alt="NumPy Vectorized" /></a>
+    <a href="https://pillow.readthedocs.io"><img src="https://img.shields.io/badge/Pillow-16K_Export-11557c?style=flat-square" alt="Pillow 16K Export" /></a>
+    <a href="https://docs.pytest.org"><img src="https://img.shields.io/badge/pytest-19_passed-brightgreen?style=flat-square&logo=pytest" alt="pytest: 19 passed" /></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-slate?style=flat-square" alt="License: MIT" /></a>
   </p>
-  <p>👉 <strong><a href="https://fantasticfractals.pages.dev">Launch Live Web App in Browser →</a></strong></p>
+  <p>
+    🌐 <strong><a href="https://fantasticfractals.pages.dev">Try the Live Web App (WebGL 2.0)</a></strong> | 
+    📂 <strong><a href="https://github.com/QuantumTechCoder/FantasticFractals">Main Navigation Hub</a></strong>
+  </p>
 </div>
 
 > [!IMPORTANT]
 > ### 📍 Repository Ecosystem & Branch Directory
-> **FantasticFractals** is structured as an **isolated multi-branch ecosystem** to keep target environments lightweight and modular.
->
-> The full production codebase — including the **React + Vite** frontend, **hardware-accelerated WebGL 2.0 fragment shaders**, and **Cloudflare Pages Functions** serverless edge API — lives entirely in the **[`website`](https://github.com/QuantumTechCoder/FantasticFractals/tree/website)** branch!
->
+> This library is part of the **FantasticFractals** multi-branch ecosystem:
+> 
 > | Branch | Status | Description & Stack | Direct Link |
 > | :--- | :---: | :--- | :---: |
-> | **`main`** | 🟢 Active | **Central Navigation Hub & Roadmap**. Overview documentation index. *(You are here)* | [View Index](https://github.com/QuantumTechCoder/FantasticFractals) |
-> | **`website`** | 🚀 **Live** | **Web Application & Edge API**. React 18, Vite, WebGL 2.0 shaders, Tailwind CSS, Cloudflare Pages Functions. | **[Explore `website` Branch →](https://github.com/QuantumTechCoder/FantasticFractals/tree/website)** |
-> | *`python`* | 🛠️ *Planned* | **Scientific Library & CLI**. Arbitrary-precision NumPy matrices, Numba JIT kernels, automated exports. | *Coming Soon* |
+> | **`main`** | 🟢 Active | **Central Navigation Hub & Roadmap**. Overview documentation index. | [View Index](https://github.com/QuantumTechCoder/FantasticFractals) |
+> | **`website`** | 🚀 **Live** | **Web Application & Edge API**. React 18, Vite, WebGL 2.0 shaders, Tailwind CSS. | [Explore `website` Branch →](https://github.com/QuantumTechCoder/FantasticFractals/tree/website) |
+> | **`python`** | 🟢 **Active** | **Scientific Library & CLI**. Vectorized NumPy computation, 16K export, box dimension analysis. *(You are here)* | [View `python` Branch](https://github.com/QuantumTechCoder/FantasticFractals/tree/python) |
 > | *`nodejs`* | 🛠️ *Planned* | **NPM Package & Utilities**. Standalone procedural rendering engine and CLI for asset generation. | *Coming Soon* |
->
-> ```bash
-> # Clone the web application directly:
-> git clone -b website https://github.com/QuantumTechCoder/FantasticFractals.git
-> ```
 
 ---
 
-## 🌟 What is FantasticFractals?
+## 🌟 Overview
 
-**FantasticFractals** brings the infinite majesty of mathematical chaos theory directly to your web browser with zero lag. Powered by custom WebGL 2.0 GPU fragment shaders and Cloudflare serverless edge infrastructure, it computes millions of complex iterations in **under 3 milliseconds**, letting you glide seamlessly through infinite fractal universes at **60 frames per second**.
+`fantasticfractals` is a high-performance Python package for computing, analyzing, and exporting fractal geometry. Built on top of vectorized **NumPy** array operations and **Pillow**, it brings 27 mathematical fractals to scientific notebooks, command-line scripts, and creative pipelines without requiring heavy external dependencies.
 
 ```text
                .---.             _                    _    _
@@ -42,108 +39,195 @@
                '---'            | | | |  __/ (_| | (_| |  | | (_) | (_) | |_) |
                                 |_| |_|\___|\__,_|\__,_|  |_|\___/ \___/| .__/
                                                                         | |
-  Infinite Resolution • 27 Famous Fractals • Hardware GPU Accelerated  |_|
+  Vectorized NumPy • 27 Fractal Systems • 16K Ultra-HD • CLI & Python SDK|_|
 ```
 
 ---
 
-## ✨ Standout Features
+## ✨ Features
 
-### ⚡ 1. Blazing Fast Hardware GPU Compute (2–5ms Passes)
-Forget sluggish CPU canvas loop redraws. FantasticFractals compiles your chosen fractal formula into a **native WebGL 2.0 GLSL fragment shader** running thousands of calculations concurrently on your graphics card. Pan, zoom, and scrub without a single frame drop.
-
-### 🎬 2. The Evolution Slideshow Engine
-Fractals are iterative limits. With the built-in **Uniform Evolution Engine**, you can watch fractals assemble themselves layer-by-layer as the iteration ceiling increases uniformly in real time (e.g., $1 \to 2 \to 3 \to \dots \to 250+$ iterations).
-* **Interactive Scrubber**: Rewind or fast-forward through the fractal's evolutionary history.
-* **Speed Controller**: Fine-tune animation tempo (5 to 60 iterations/second).
-* **Modes**: Loop, Linear, or Ping-Pong oscillation.
-
-### 🔍 3. Type-to-Find Searchable Drawer (27 Fractals)
-Instantly jump between 27 iconic fractals with instant fuzzy typing, category chips, and LaTeX formula previews.
-
-### 🎨 4. Smooth Fractional Potential & 8 Palettes
-* Normalized continuous potential ($\nu = n + 1 - \frac{\ln(\ln |z|)}{\ln 2}$) eradicates harsh stepping bands for silk-smooth gradients.
-* 8 vibrant palettes: *Cyberpunk Neon, Electric Fire, Deep Abyss, Toxic Emerald, Prismatic Spectra, Twilight Horizon, Silver Obsidian, and Cosmic Trip*.
-* 360° dynamic color phase shift slider for mesmerizing color cycling animations.
-
-### 📸 5. 4K Ultra HD Export & Shareable Permalinks
-* Export crystal-clear wallpaper renders up to **4K UHD (3840 × 2160)**.
-* Generate one-click permalinks encoding exact coordinates, zoom levels, iteration counts, and color palettes.
+- 📐 **27 Mathematical Fractals**: Complete analytical support for Mandelbrot, Julia, Burning Ship, Tricorn, Multibrots, Newton basins, Nova, Magnet rational maps, Feather, Sierpinski Triangle/Carpet, Koch Snowflake, Vicsek, Apollonian Inversion Gasket, Dragon Curve, Collatz dynamics, Lyapunov exponents, and Barnsley Fern IFS.
+- 🚀 **Vectorized NumPy Operations**: Pure broadcasted matrix computations running efficiently on any standard Python installation.
+- 🎨 **Smooth Fractional Potential**: Continuous iteration bands and logarithmic exterior distance smoothing to eliminate color stepping.
+- 🌈 **8 Signature Color Palettes**: Built-in palettes (`cyberpunk`, `fire`, `ocean`, `emerald`, `rainbow`, `sunset`, `monochrome`, `psychedelic`) with customizable phase shifts and loop repetitions.
+- 🖼️ **Ultra-HD Image Exporter**: Render wallpapers and publication-grade renders with presets from `720p`, `1080p`, `1440p`, `4k`, `8k`, up to `16k` (15360 × 8640).
+- 🔬 **Minkowski-Bouligand Box Dimension**: Calculate the empirical Hausdorff/box-counting fractal dimension $D = \lim_{\epsilon \to 0} \frac{\log N(\epsilon)}{\log(1/\epsilon)}$ directly from iteration grids.
+- 🎬 **Zoom Dive & Evolution Animations**: Export smooth zooming GIF and MP4 animations or iteration-evolution sequences.
+- 💻 **Complete CLI**: Render, analyze, and inspect fractals straight from the terminal.
 
 ---
 
-## 🧬 Catalog of 27 Supported Fractals
+## 📦 Installation
 
-<details open>
-<summary><b>Click to expand full mathematical equation breakdown</b></summary>
-<br/>
-
-| Category | Fractal | Core Equation / Dynamics | GPU Accelerated |
-| :--- | :--- | :--- | :---: |
-| **Classical Escape** | **Mandelbrot Set** | $z_{n+1} = z_n^2 + c$ | ⚡ 2ms WebGL |
-| **Classical Escape** | **Julia Sets** | $z_{n+1} = z_n^2 + C_{\text{fixed}}$ *(Interactive $C$)* | ⚡ 2ms WebGL |
-| **Non-Analytic** | **Burning Ship** | $z_{n+1} = (\|Re(z_n)\| + i\|Im(z_n)\|)^2 + c$ | ⚡ 2ms WebGL |
-| **Non-Analytic** | **Celtic Mandelbrot** | $z_{n+1} = \|Re(z_n^2)\| + i Im(z_n^2) + c$ | ⚡ 2ms WebGL |
-| **Non-Analytic** | **Buffalo Fractal** | $z_{n+1} = \|Re(z_n^2)\| - \|Re(z_n)\| + c$ | ⚡ 2ms WebGL |
-| **Non-Analytic** | **Perpendicular Mandelbrot** | $z_{n+1} = Re(z)^2 - Im(z)^2 - 2i\|Re(z)\|Im(z) + c$ | ⚡ 2ms WebGL |
-| **Non-Analytic** | **Perpendicular Burning Ship**| $z_{n+1} = \|Re(z)\|^2 - Im(z)^2 - 2i Re(z)\|Im(z)\| + c$ | ⚡ 2ms WebGL |
-| **Conjugate** | **Tricorn (Mandelbar)** | $z_{n+1} = \bar{z}_n^2 + c$ | ⚡ 2ms WebGL |
-| **Conjugate** | **Cubic Tricorn (Multibar 3)**| $z_{n+1} = \bar{z}_n^3 + c$ | ⚡ 2ms WebGL |
-| **Higher Order** | **Multibrot (d=3)** | $z_{n+1} = z_n^3 + c$ | ⚡ 2ms WebGL |
-| **Higher Order** | **Multibrot (d=4)** | $z_{n+1} = z_n^4 + c$ | ⚡ 2ms WebGL |
-| **Convergence** | **Newton-Raphson ($z^3 = 1$)** | $z_{n+1} = z_n - \frac{z_n^3 - 1}{3z_n^2}$ | ⚡ 2ms WebGL |
-| **Convergence** | **Newton Quartic ($z^4 = 1$)** | $z_{n+1} = \frac{3z_n + 1/z_n^3}{4}$ | ⚡ 2ms WebGL |
-| **Convergence** | **Nova Fractal** | $z_{n+1} = z_n - R \frac{z_n^3 - 1}{3z_n^2} + c$ | ⚡ 2ms WebGL |
-| **Physics & Rational**| **Magnet Fractal Type 1** | $z_{n+1} = \left(\frac{z_n^2 + c - 1}{2z_n + c - 2}\right)^2$ (Potts Spin Model) | ⚡ 2ms WebGL |
-| **Physics & Rational**| **Magnet Fractal Type 2** | Complex magnetic phase transition rational map | ⚡ 2ms WebGL |
-| **Physics & Rational**| **Feather Fractal** | $z_{n+1} = \frac{z_n^3}{1 + z_n^2} + c$ | ⚡ 2ms WebGL |
-| **Geometric / IFS** | **Sierpinski Triangle** | Recursive affine reflection gasket | ⚡ 2ms WebGL |
-| **Geometric / IFS** | **Koch Snowflake Island** | 6-fold radial symmetry snowflake envelope | ⚡ 2ms WebGL |
-| **Geometric / IFS** | **Vicsek Box Cross** | 9-partition planar cross fractal | ⚡ 2ms WebGL |
-| **Geometric / IFS** | **Sierpinski Carpet** | $(x \pmod 3 == 1) \land (y \pmod 3 == 1)$ | ⚡ 2ms WebGL |
-| **Geometric / IFS** | **Cantor Dust (2D)** | Cartesian product of Cantor ternary sets ($C \times C$) | ⚡ 2ms WebGL |
-| **Geometric / IFS** | **Apollonian Gasket** | Mutually osculating circle inversion lattice | ⚡ 2ms WebGL |
-| **Geometric / IFS** | **Heighway Dragon** | Limit boundary of paper-folding dragon curve | ⚡ 2ms WebGL |
-| **Dynamical Systems** | **Collatz Complex Set** | Analytic continuation of $3n+1$ into $\mathbb{C}$ | 🖥️ Web Worker |
-| **Dynamical Systems** | **Lyapunov Space** | Chaotic bifurcation population stability ($AB$) | 🖥️ Web Worker |
-| **Dynamical Systems** | **Barnsley Fern IFS** | Stochastic affine biological transformation | 🖥️ Canvas 2D |
-
-</details>
-
----
-
-## ⚡ Quick Start for Developers
-
-Want to run or contribute to the web visualizer locally? Switch over to the [`website`](https://github.com/QuantumTechCoder/FantasticFractals/tree/website) branch:
+Clone the `python` branch and install locally:
 
 ```bash
-# 1. Clone the website branch
-git clone -b website https://github.com/QuantumTechCoder/FantasticFractals.git
-
-# 2. Enter the directory
+# Clone the python branch
+git clone -b python https://github.com/QuantumTechCoder/FantasticFractals.git
 cd FantasticFractals
 
-# 3. Install dependencies
-npm install
+# Install in editable mode
+pip install -e .
 
-# 4. Launch local development server
-npm run dev
+# Or install dependencies directly
+pip install numpy pillow
 ```
 
-Visit `http://localhost:5173` to explore fractals locally!
+---
+
+## 🚀 Quickstart: Python SDK
+
+### 1. Render and Save a High-Resolution Fractal
+
+```python
+from fantasticfractals import render_fractal, export_image
+
+# Render a Burning Ship fractal with the cyberpunk palette
+image = render_fractal(
+    fractal_type="burning_ship",
+    width=1920,
+    height=1080,
+    palette="cyberpunk",
+    max_iterations=300,
+)
+
+# Save directly to disk
+image.save("burning_ship.png")
+
+# Or use resolution presets up to 16K:
+export_image(
+    "mandelbrot",
+    "mandelbrot_4k.png",
+    preset="4k",
+    palette="ocean"
+)
+```
+
+### 2. Compute the Box-Counting Fractal Dimension
+
+```python
+from fantasticfractals import FractalEngine, compute_box_dimension
+
+# Generate raw iteration matrix
+engine = FractalEngine()
+raw_grid = engine.render_raw("sierpinski_triangle", width=1024, height=1024, max_iter=20)
+
+# Compute Minkowski-Bouligand dimension
+dim, r_squared, scales, counts = compute_box_dimension(raw_grid)
+print(f"Empirical Box Dimension: {dim:.4f} (R² = {r_squared:.4f})")
+# Expected for Sierpinski Triangle: log(3)/log(2) ≈ 1.585
+```
+
+### 3. Generate a Deep Zoom Video / GIF
+
+```python
+from fantasticfractals import create_zoom_animation
+
+create_zoom_animation(
+    fractal_type="mandelbrot",
+    output_path="mandelbrot_zoom.gif",
+    center=(-0.743643887037158704752191506114774, 0.131825904205311970493132056385139),
+    start_zoom=1.0,
+    end_zoom=1500.0,
+    frames=60,
+    fps=15,
+    width=640,
+    height=360,
+    palette="fire"
+)
+```
 
 ---
 
-## 🤝 Community & Support
+## 💻 Command Line Interface (CLI)
 
-* 🐛 **Found a bug or have a suggestion?** Open an [Issue](https://github.com/QuantumTechCoder/FantasticFractals/issues).
-* 💡 **Want to add a new fractal equation?** Pull requests on the [`website`](https://github.com/QuantumTechCoder/FantasticFractals/tree/website) branch are warmly welcomed!
-* ⭐ **Enjoying the project?** Give this repository a star — it helps others discover the beauty of mathematical art!
+The package installs the `fantasticfractals` command (or `python -m fantasticfractals.cli.main`):
+
+### List All Fractals
+```bash
+fantasticfractals list
+```
+
+### View Mathematical Details
+```bash
+fantasticfractals info mandelbrot
+fantasticfractals info magnet1
+```
+
+### Render Ultra-HD Images
+```bash
+# Render 4K Burning Ship
+fantasticfractals render --type burning_ship --res 4k --palette cyberpunk --out burning_ship_4k.png
+
+# Render Julia Set with custom complex constant c = -0.7 + 0.27015i
+fantasticfractals render --type julia --res 1080p --jr -0.7 --ji 0.27015 --palette sunset --out julia.png
+```
+
+### Compute Fractal Dimension
+```bash
+fantasticfractals dimension --type koch_snowflake --size 1024
+```
+
+### Create Zoom Dive Animation
+```bash
+fantasticfractals video --type mandelbrot --frames 45 --out dive.gif
+```
 
 ---
 
-<div align="center">
+## 📚 Supported Fractals Catalog (27 Systems)
 
-Made with 💜 and mathematics • Powered by [Cloudflare Pages](https://fantasticfractals.pages.dev) • Licensed under [MIT](LICENSE)
+| Category | Fractal ID | Mathematical Formulation | Default Center $(x, y)$ |
+| :--- | :--- | :--- | :--- |
+| **Classical Escape** | `mandelbrot` | $z_{n+1} = z_n^2 + c$ | $(-0.5, 0.0)$ |
+| | `julia` | $z_{n+1} = z_n^2 + c_{const}$ | $(0.0, 0.0)$ |
+| **Non-Analytic** | `burning_ship` | $z_{n+1} = (\|\text{Re}(z_n)\| + i\|\text{Im}(z_n)\|)^2 + c$ | $(-0.45, -0.5)$ |
+| | `celtic_mandelbrot` | $z_{n+1} = (\|\text{Re}(z_n^2 - c)\| + i\,\text{Im}(z_n^2)) + c$ | $(-0.8, 0.0)$ |
+| | `buffalo` | $z_{n+1} = (\|\text{Re}(z_n)\| + i\|\text{Im}(z_n)\|)^2 - \|\text{Re}(z_n)\| + c$ | $(-0.4, -0.2)$ |
+| | `perp_mandelbrot` | $z_{n+1} = (\text{Re}(z_n) - i\|\text{Im}(z_n)\|)^2 + c$ | $(-0.5, 0.0)$ |
+| | `perp_burning_ship`| $z_{n+1} = (\|\text{Re}(z_n)\| - i\,\text{Im}(z_n))^2 + c$ | $(-0.45, -0.5)$ |
+| **Conjugate Escape** | `tricorn` | $z_{n+1} = \bar{z}_n^2 + c$ | $(0.0, 0.0)$ |
+| | `multibar3` | $z_{n+1} = \bar{z}_n^3 + c$ | $(0.0, 0.0)$ |
+| **Higher Order** | `multibrot3` | $z_{n+1} = z_n^3 + c$ | $(0.0, 0.0)$ |
+| | `multibrot4` | $z_{n+1} = z_n^4 + c$ | $(0.0, 0.0)$ |
+| **Convergence Basins**| `newton` | $z_{n+1} = z_n - \frac{z_n^3 - 1}{3 z_n^2}$ | $(0.0, 0.0)$ |
+| | `newton_z4` | $z_{n+1} = z_n - \frac{z_n^4 - 1}{4 z_n^3}$ | $(0.0, 0.0)$ |
+| | `nova` | $z_{n+1} = z_n - R \frac{z_n^3 - 1}{3 z_n^2} + c$ | $(0.0, 0.0)$ |
+| **Physics & Rational** | `magnet1` | $z_{n+1} = \left(\frac{z_n^2 + c - 1}{2z_n + c - 2}\right)^2$ | $(0.5, 0.0)$ |
+| | `magnet2` | $z_{n+1} = \left(\frac{z_n^3 + 3(c-1)z_n + (c-1)(c-2)}{3z_n^2 + 3(c-2)z_n + (c-1)(c-2) + 1}\right)^2$ | $(0.5, 0.0)$ |
+| | `feather` | $z_{n+1} = \frac{z_n^3}{1 + z_n^2} + c$ | $(-0.2, 0.0)$ |
+| **Geometric / IFS** | `sierpinski_triangle` | Midpoint affine contraction / bitwise XOR metric | $(0.0, -0.15)$ |
+| | `koch_snowflake` | Boundary fold generator / IFS segment limit | $(0.0, 0.0)$ |
+| | `vicsek` | 5-box cross decomposition | $(0.0, 0.0)$ |
+| | `sierpinski_carpet` | 8-box 3×3 square subgrid removal | $(0.0, 0.0)$ |
+| | `cantor_dust` | 4-corner tensor product Cartesian dust | $(0.0, 0.0)$ |
+| | `apollonian` | Tangent sphere circle inversion gasket | $(0.0, 0.0)$ |
+| | `dragon_curve` | Heighway 90° rotation unfold limit | $(0.2, 0.0)$ |
+| **Dynamical Systems** | `collatz` | Complex analytic extension $z/2 \cos^2(\pi z/2) + \frac{3z+1}{2} \sin^2(\pi z/2)$ | $(0.0, 0.0)$ |
+| | `lyapunov` | Exponent $\lambda = \lim_{N\to\infty} \frac{1}{N}\sum \ln \|r_n(1 - 2x_n)\|$ | $(3.8, 3.8)$ |
+| | `barnsley_fern` | Affine transformation attractor IFS | $(0.0, 4.8)$ |
 
-</div>
+---
+
+## 🧪 Testing
+
+The library includes an extensive test suite verifying algorithm stability, registry schemas, array bounds, image exporters, and dimension estimators:
+
+```bash
+# Run pytest
+pytest
+```
+
+```text
+tests/test_analysis.py ..                                                [ 10%]
+tests/test_registry.py ....                                              [ 31%]
+tests/test_render.py .............                                       [100%]
+
+============================= 19 passed in 0.41s ==============================
+```
+
+---
+
+## 📄 License
+
+This project is open-source under the [MIT License](LICENSE).
