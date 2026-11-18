@@ -315,7 +315,7 @@ def compute_grid(
         return iters
 
     elif fid == "nova":
-        Z = C.copy()
+        Z = np.ones(C.shape, dtype=complex)
         iters = np.full(C.shape, -1.0, dtype=np.float64)
         active = np.ones(C.shape, dtype=bool)
 
@@ -323,13 +323,27 @@ def compute_grid(
             if not np.any(active):
                 break
             z_act = Z[active]
-            next_z = (2.0 * z_act + 1.0 / (z_act ** 2)) / 3.0 + C[active] * 0.2
-            conv = np.abs(next_z - z_act) < 1e-3
-            if np.any(conv):
-                act_idx = np.where(active)[0][conv], np.where(active)[1][conv]
-                iters[act_idx] = float(i) * 2.5
+            c_act = C[active]
+            safe = np.abs(z_act) > 1e-6
+            z2 = z_act ** 2
+            next_z = np.zeros_like(z_act)
+            next_z[safe] = (2.0 * z_act[safe] + 1.0 / z2[safe]) / 3.0 + c_act[safe]
+
+            diff = next_z - z_act
+            conv = (diff.real**2 + diff.imag**2) < 1e-7
+            div = (next_z.real**2 + next_z.imag**2) > 100.0
+
+            done = conv | div | (~safe)
+            if np.any(done):
+                act_idx = np.where(active)[0][done], np.where(active)[1][done]
+                done_conv = conv[done]
+                done_div = div[done]
+                val = float(i) * 2.5
+                res_vals = np.where(done_conv, val, np.where(done_div, val + 50.0, -1.0))
+                iters[act_idx] = res_vals
                 active[act_idx] = False
-            Z[active] = next_z[~conv]
+
+            Z[active] = next_z[~done]
 
         return iters
 
@@ -530,7 +544,7 @@ def compute_grid(
         return iters
 
     elif fid == "feather":
-        Z = C.copy()
+        Z = np.zeros(C.shape, dtype=complex)
         iters = np.full(C.shape, -1.0, dtype=np.float64)
         active = np.ones(C.shape, dtype=bool)
 
@@ -538,13 +552,25 @@ def compute_grid(
             if not np.any(active):
                 break
             z_act = Z[active]
-            next_z = (z_act ** 3) / (1.0 + z_act ** 2) + C[active]
-            escaped = (np.abs(next_z) > 4.0)
+            c_act = C[active]
+
+            r2 = z_act.real**2 + z_act.imag**2
+            escaped = r2 > 16.0
+
             if np.any(escaped):
-                act_coords = np.where(active)[0][escaped], np.where(active)[1][escaped]
-                iters[act_coords] = float(i)
-                active[act_coords] = False
-            Z[active] = next_z[~escaped]
+                act_idx = np.where(active)[0][escaped], np.where(active)[1][escaped]
+                r2_esc = r2[escaped]
+                log_zn = np.log(r2_esc) / 2.0
+                nu = np.log2(np.maximum(1.0, log_zn))
+                iters[act_idx] = float(i) + 1.0 - nu
+                active[act_idx] = False
+
+            z_rem = z_act[~escaped]
+            c_rem = c_act[~escaped]
+            r2_rem = r2[~escaped]
+
+            denom = 1.0 + 1j * r2_rem
+            Z[active] = (z_rem ** 3) / denom + c_rem
 
         return iters
 
