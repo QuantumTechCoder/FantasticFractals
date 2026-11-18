@@ -161,11 +161,11 @@ export const FRACTAL_TYPES = [
     id: 'nova',
     name: 'Nova Fractal',
     category: 'Convergence Basin',
-    formula: 'z_{n+1} = z_n - R \\frac{z_n^3 - 1}{3z_n^2} + c',
-    description: 'A hybrid relaxation method adding the coordinate c at each Newton iteration step.',
-    defaultCenter: { x: 0.0, y: 0.0 },
-    defaultZoom: 0.8,
-    defaultIterations: 90,
+    formula: 'z_{n+1} = z_n - \\frac{z_n^3 - 1}{3z_n^2} + c',
+    description: 'Paul Derbyshire relaxation fractal adding coordinate c to Newton iterations (z_0 = 1).',
+    defaultCenter: { x: -0.5, y: 0.0 },
+    defaultZoom: 0.9,
+    defaultIterations: 80,
     maxIterations: 1000,
   },
 
@@ -196,10 +196,10 @@ export const FRACTAL_TYPES = [
     id: 'feather',
     name: 'Feather Fractal',
     category: 'Physics & Rational',
-    formula: 'z_{n+1} = \\frac{z_n^3}{1 + z_n^2} + c',
-    description: 'Rational function creating delicate plumes and crystalline barbs.',
+    formula: 'z_{n+1} = \\frac{z_n^3}{1 + i|z_n|^2} + c',
+    description: 'Rational dynamic map exhibiting organic feather-like dendritic plume filaments.',
     defaultCenter: { x: 0.0, y: 0.0 },
-    defaultZoom: 0.8,
+    defaultZoom: 1.0,
     defaultIterations: 100,
     maxIterations: 1500,
   },
@@ -517,42 +517,43 @@ export function computePoint(type, x0, y0, maxIter, params = {}) {
     }
 
     case 'nova': {
-      let zx = x0, zy = y0, i = 0;
+      let zx = 1.0, zy = 0.0, i = 0;
       while (i < maxIter) {
         const d2 = zx * zx + zy * zy;
         if (d2 < 1e-8) break;
         const invD4 = 1.0 / (d2 * d2);
         const invZ2x = (zx * zx - zy * zy) * invD4;
         const invZ2y = (-2.0 * zx * zy) * invD4;
-        const nextX = (2.0 * zx + invZ2x) / 3.0 + x0 * 0.2;
-        const nextY = (2.0 * zy + invZ2y) / 3.0 + y0 * 0.2;
+        const nextX = (2.0 * zx + invZ2x) / 3.0 + x0;
+        const nextY = (2.0 * zy + invZ2y) / 3.0 + y0;
         const dx = nextX - zx, dy = nextY - zy;
-        if (dx * dx + dy * dy < 1e-3) return i * 2.5;
+        if (dx * dx + dy * dy < 1e-7) return i * 2.5;
+        if (nextX * nextX + nextY * nextY > 100.0) return i * 2.5 + 50.0;
         zx = nextX; zy = nextY;
         i++;
       }
-      return i >= maxIter ? -1 : i;
+      return -1;
     }
 
     case 'feather': {
-      let zx = x0, zy = y0, i = 0;
-      while (zx * zx + zy * zy <= BAILOUT_SQ && i < maxIter) {
-        // z^3 / (1 + z^2) + c
-        const z2x = zx * zx - zy * zy;
-        const z2y = 2.0 * zx * zy;
-        const denomX = 1.0 + z2x;
-        const denomY = z2y;
-        const denomD2 = denomX * denomX + denomY * denomY;
-        if (denomD2 < 1e-8) break;
-        const z3x = zx * z2x - zy * z2y;
-        const z3y = zx * z2y + zy * z2x;
-        const fracX = (z3x * denomX + z3y * denomY) / denomD2;
-        const fracY = (z3y * denomX - z3x * denomY) / denomD2;
+      let zx = 0.0, zy = 0.0, i = 0;
+      while (i < maxIter) {
+        const r2 = zx * zx + zy * zy;
+        if (r2 > 16.0) {
+          const log_zn = Math.log(r2) / 2.0;
+          const nu = Math.log(Math.max(1.0, log_zn) / 0.693147) / 0.693147;
+          return i + 1.0 - nu;
+        }
+        const z3x = zx * (zx * zx - 3.0 * zy * zy);
+        const z3y = zy * (3.0 * zx * zx - zy * zy);
+        const denNorm = 1.0 + r2 * r2;
+        const fracX = (z3x + z3y * r2) / denNorm;
+        const fracY = (z3y - z3x * r2) / denNorm;
         zx = fracX + x0;
         zy = fracY + y0;
         i++;
       }
-      return i >= maxIter ? -1 : i;
+      return -1;
     }
 
     case 'magnet1': {

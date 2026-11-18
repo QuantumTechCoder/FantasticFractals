@@ -155,8 +155,8 @@ void main() {
       z = nextZ;
     }
   } else if (u_fractalType == 7) {
-    // 8. Nova Fractal
-    vec2 z = c;
+    // 8. Nova Fractal (Mandelbrot form, z0 = (1.0, 0.0), z_{n+1} = (2z + 1/z^2)/3 + c)
+    vec2 z = vec2(1.0, 0.0);
     int i = 0;
     for (; i < 500; i++) {
       if (i >= u_maxIterations) break;
@@ -164,9 +164,14 @@ void main() {
       if (d2 < 1e-8) break;
       float invD4 = 1.0 / (d2 * d2);
       vec2 invZ2 = vec2(z.x * z.x - z.y * z.y, -2.0 * z.x * z.y) * invD4;
-      vec2 nextZ = (2.0 * z + invZ2) / 3.0 + c * 0.2;
-      if (distance(nextZ, z) < 1e-3) {
+      vec2 nextZ = (2.0 * z + invZ2) / 3.0 + c;
+      vec2 diff = nextZ - z;
+      if (dot(diff, diff) < 1e-7) {
         iterVal = float(i) * 2.5;
+        break;
+      }
+      if (dot(nextZ, nextZ) > 100.0) {
+        iterVal = float(i) * 2.5 + 50.0;
         break;
       }
       z = nextZ;
@@ -330,21 +335,23 @@ void main() {
       z = nextZ;
     }
   } else if (u_fractalType == 18) {
-    // 19. Feather Fractal: z^3 / (1 + z^2) + c
-    vec2 z = c;
+    // 19. Feather Fractal: z^3 / (1 + i*|z|^2) + c
+    vec2 z = vec2(0.0);
     int i = 0;
     for (; i < 500; i++) {
       if (i >= u_maxIterations) break;
-      if (dot(z, z) > BAILOUT_SQ) break;
-      vec2 z2 = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y);
-      vec2 denom = vec2(1.0 + z2.x, z2.y);
-      float denD2 = dot(denom, denom);
-      if (denD2 < 1e-8) break;
-      vec2 z3 = vec2(z.x * z2.x - z.y * z2.y, z.x * z2.y + z.y * z2.x);
-      vec2 frac = vec2(z3.x * denom.x + z3.y * denom.y, z3.y * denom.x - z3.x * denom.y) / denD2;
+      float r2 = dot(z, z);
+      if (r2 > 16.0) {
+        float log_zn = log(r2) / 2.0;
+        float nu = log(max(1.0, log_zn) / 0.693147) / 0.693147;
+        iterVal = float(i) + 1.0 - nu;
+        break;
+      }
+      vec2 z3 = vec2(z.x * (z.x * z.x - 3.0 * z.y * z.y), z.y * (3.0 * z.x * z.x - z.y * z.y));
+      float denNorm = 1.0 + r2 * r2;
+      vec2 frac = vec2(z3.x + z3.y * r2, z3.y - z3.x * r2) / denNorm;
       z = frac + c;
     }
-    if (i < u_maxIterations) iterVal = float(i);
   } else if (u_fractalType == 19) {
     // 20. Magnet Fractal Type 1
     vec2 z = vec2(0.0);
