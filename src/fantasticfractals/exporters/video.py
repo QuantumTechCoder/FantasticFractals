@@ -11,9 +11,9 @@ from PIL import Image
 from ..engines.numpy_engine import FractalEngine
 
 def create_zoom_animation(
-    fractal: str,
-    output_path: str,
-    center: Tuple[float, float],
+    fractal: Optional[str] = None,
+    output_path: str = "zoom.gif",
+    center: Optional[Tuple[float, float]] = None,
     start_zoom: float = 1.0,
     end_zoom: float = 1000.0,
     frames: int = 120,
@@ -24,11 +24,16 @@ def create_zoom_animation(
     palette: str = "cyberpunk",
     palette_shift: float = 0.0,
     params: Optional[Dict[str, Any]] = None,
+    fractal_type: Optional[str] = None,
+    max_iterations: Optional[int] = None,
+    **kwargs,
 ) -> Path:
     """
     Renders an exponential zoom dive animation into target coordinates.
     Saves as animated GIF or MP4 (if imageio is installed).
     """
+    fid = fractal or fractal_type or kwargs.pop("fractal_id", None) or "mandelbrot"
+    it = max_iterations if max_iterations is not None else iterations
     dest = Path(output_path)
     dest.parent.mkdir(parents=True, exist_ok=True)
 
@@ -38,12 +43,12 @@ def create_zoom_animation(
 
     for i, z in enumerate(zoom_levels):
         img = FractalEngine.render_image(
-            fractal_id=fractal,
+            fractal_id=fid,
             width=width,
             height=height,
             center=center,
             zoom=float(z),
-            iterations=iterations,
+            iterations=it,
             palette=palette,
             palette_shift=palette_shift + (i / frames) * 0.25,
             params=params,
@@ -85,8 +90,8 @@ def create_zoom_animation(
     return dest
 
 def create_evolution_animation(
-    fractal: str,
-    output_path: str,
+    fractal: Optional[str] = None,
+    output_path: str = "evolution.gif",
     center: Optional[Tuple[float, float]] = None,
     zoom: Optional[float] = None,
     max_iterations: int = 100,
@@ -96,17 +101,22 @@ def create_evolution_animation(
     height: int = 360,
     palette: str = "cyberpunk",
     params: Optional[Dict[str, Any]] = None,
+    fractal_type: Optional[str] = None,
+    iterations: Optional[int] = None,
+    **kwargs,
 ) -> Path:
     """
     Renders an iteration evolution animation where iterations increase step-by-step.
     """
+    fid = fractal or fractal_type or kwargs.pop("fractal_id", None) or "mandelbrot"
+    max_it = iterations if iterations is not None else max_iterations
     dest = Path(output_path)
     dest.parent.mkdir(parents=True, exist_ok=True)
 
     rendered_frames: List[Image.Image] = []
-    for it in range(1, max_iterations + 1, step):
+    for it in range(1, max_it + 1, step):
         img = FractalEngine.render_image(
-            fractal_id=fractal,
+            fractal_id=fid,
             width=width,
             height=height,
             center=center,

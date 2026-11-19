@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fantasticfractals"
-version = "1.0.1"
+version = "1.0.2"
 description = "High-performance mathematical fractal generator, arbitrary-precision deep zoom engine, and 4K/video exporter."
 readme = "README.md"
 requires-python = ">=3.9"

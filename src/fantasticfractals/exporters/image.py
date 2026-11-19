@@ -18,8 +18,8 @@ RESOLUTION_PRESETS = {
 }
 
 def export_image(
-    fractal: str,
-    output_path: str,
+    fractal: Optional[str] = None,
+    output_path: str = "fractal.png",
     resolution: str = "1080p",
     custom_size: Optional[Tuple[int, int]] = None,
     center: Optional[Tuple[float, float]] = None,
@@ -28,37 +28,28 @@ def export_image(
     palette: str = "cyberpunk",
     palette_shift: float = 0.0,
     params: Optional[Dict[str, Any]] = None,
+    fractal_type: Optional[str] = None,
+    max_iterations: Optional[int] = None,
+    **kwargs,
 ) -> Path:
     """
     Renders and exports a high-resolution fractal image to disk.
-
-    Args:
-        fractal: Identifier of the fractal (e.g. 'mandelbrot', 'burning_ship', 'julia')
-        output_path: Path where the image file will be saved (.png, .jpg, .tiff)
-        resolution: Preset resolution ('720p', '1080p', '1440p', '4k', '8k')
-        custom_size: Optional (width, height) tuple overriding preset
-        center: Complex plane coordinates (Re, Im)
-        zoom: Viewport zoom multiplier
-        iterations: Maximum iteration cutoff
-        palette: Color palette name
-        palette_shift: 360-degree color phase shift (0.0 to 1.0)
-        params: Extra parameters (e.g. julia_real, julia_imag)
-
-    Returns:
-        Path to saved file.
     """
+    fid = fractal or fractal_type or kwargs.pop("fractal_id", None) or "mandelbrot"
+    it = max_iterations if max_iterations is not None else iterations
+
     if custom_size:
         w, h = custom_size
     else:
         w, h = RESOLUTION_PRESETS.get(resolution.lower(), RESOLUTION_PRESETS["1080p"])
 
     img = FractalEngine.render_image(
-        fractal_id=fractal,
+        fractal_id=fid,
         width=w,
         height=h,
         center=center,
         zoom=zoom,
-        iterations=iterations,
+        iterations=it,
         palette=palette,
         palette_shift=palette_shift,
         params=params,
